@@ -1,0 +1,56 @@
+{
+    "admin": [
+        {
+            "id": 1,
+            "question": "What is your name?",
+            "answer": "My name is John Doe"
+        },
+        {
+            "id": 2,
+            "question": "What is your age?",
+            "answer": "I am 25 years old"
+        },
+        {
+            "id": 3,
+            "question": "What is your education?",
+            "answer": "I have a degree in Computer Science"
+        },
+        {
+            "id": 4,
+            "question": "What is your experience?",
+            "answer": "I have 5 years of experience in software development"
+        },
+        {
+            "id": 5,
+            "question": "What is your current job?",
+            "answer": "I am a software developer"
+        }
+    ],
+    "civil": [
+        {
+            "id": 1,
+            "question": "What is your name?",
+            "answer": "My name is Jane Doe"
+        },
+        {
+            "id": 2,
+            "question": "What is your age?",
+            "answer": "I am 30 years old"
+        },
+        {
+            "id": 3,
+            "question": "What is your education?",
+            "answer": "I have a degree in Business Administration"
+        },
+        {
+            "id": 4,
+            "question": "What is your experience?",
+            "answer": "I have 10 years of experience in marketing"
+        },
+        {
+            "id": 5,
+            "question": "What is your current job?",
+            "answer": "I am a marketing manager"
+        }
+    ]    
+}

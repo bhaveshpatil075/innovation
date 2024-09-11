@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask API with jQuery</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <h1>Flask API with jQuery</h1>
+
+    <h2>Items</h2>
+    <ul id="item-list"></ul>
+
+    <h2>Add Item</h2>
+    <form id="add-item-form">
+        <input type="text" id="item-name" placeholder="Name" required>
+        <input type="text" id="item-description" placeholder="Description" required>
+        <button type="submit">Add Item</button>
+    </form>
+
+    <script>
+        $(document).ready(function () {
+            // Function to fetch and display items
+            function fetchItems() {
+                $.get('http://127.0.0.1:5000/api/get-response-items', function (data) {
+                    $('#item-list').empty();
+                    data.forEach(function (item) {
+                        $('#item-list').append('<li>' + item.name + ': ' + item.description + '</li>');
+                    });
+                });
+            }
+
+            data = { "name": 'bhavesh patil',  "email": 'bhavesh.patil@bts.com', role: 'admin', 'questionid': 3, question: 'what is your age ?', answer: 'My age is 34' };
+
+            $.ajax({
+                url: 'http://127.0.0.1:5000/api/save-response',
+                data: JSON.stringify(data),
+                headers: {
+                    'Accept': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json'
+                },
+                type: 'POST',
+                success: function (response) {
+                    return resolve(response);;
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', status, error);
+                }
+            })
+
+            // Fetch items on page load
+            // fetchItems();
+
+            // Handle form submission
+            $('#add-item-form').submit(function (event) {
+                event.preventDefault();
+                const newItem = {
+                    name: $('#item-name').val(),
+                    description: $('#item-description').val()
+                };
+
+                $.post('/api/items', newItem, function () {
+                    fetchItems(); // Refresh the item list
+                    $('#item-name').val('');
+                    $('#item-description').val('');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
