@@ -28,7 +28,8 @@ def convert_webm_to_wav(webm_file_path, wav_file_path):
     command = [
         'ffmpeg',
         '-i', webm_file_path,
-        wav_file_path
+        wav_file_path,
+        '-y'
     ]
     subprocess.run(command, check=True)
 

@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 from service import text_to_speech, load_data_from_json, convert_webm_to_wav, recognize_speech_from_audio
+from heygen import question_to_video, get_video
 from werkzeug.utils import secure_filename
 import os
 import json
@@ -105,10 +106,30 @@ def upload_file():
 
     if file:
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        print(filepath)
+        if os.path.exists(filepath):
+            os.remove(filepath)
+        file.save(filepath)
         return jsonify({'message': 'File uploaded successfully'}), 200
     else:
        return jsonify({'message': 'Function not implemented'}), 500
+
+
+@app.route('/api/question-to-video', methods=['POST'])
+def question_video():
+    new_item = request.json
+    questionText = new_item['question_text']
+    data = question_to_video(questionText)
+    return data, 200
+
+@app.route('/api/get_video', methods=['POST'])
+def get_heygen_video():
+    new_item = request.json
+    video_id = new_item['video_id']
+    print(video_id)
+    data = get_video(video_id)
+    return data, 200
 
 
 if __name__ == '__main__':

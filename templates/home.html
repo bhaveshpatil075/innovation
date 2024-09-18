@@ -14,63 +14,86 @@
     <h2>Items</h2>
     <ul id="item-list"></ul>
 
-    <h2>Add Item</h2>
-    <form id="add-item-form">
-        <input type="text" id="item-name" placeholder="Name" required>
-        <input type="text" id="item-description" placeholder="Description" required>
-        <button type="submit">Add Item</button>
-    </form>
 
-    <script>
-        $(document).ready(function () {
-            // Function to fetch and display items
-            function fetchItems() {
-                $.get('http://127.0.0.1:5000/api/get-response-items', function (data) {
-                    $('#item-list').empty();
-                    data.forEach(function (item) {
-                        $('#item-list').append('<li>' + item.name + ': ' + item.description + '</li>');
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>HeyGen Video</title>
+    </head>
+
+    <body>
+
+        <h1>Embedded HeyGen Video</h1>
+
+        <!-- Replace the 'VIDEO_LINK' with your HeyGen video link -->
+        <!-- <iframe src="" width="560" height="315" frameborder="0" allowfullscreen></iframe> -->
+
+        <video width="560" height="315" controls>
+            <source src="https://files2.heygen.ai/aws_pacific/avatar_tmp/0cdfa4d948284052a5e10abb1d3da94e/813eef26e890401099d8a150c82e87c3.webm?Expires=1726757591&Signature=PoyX9MHX4~J3R5DY75V8oUSov2RzOyr40ciFwy2QyjgZJJvEkDU4eY8SXQP9JPamesNuWs8FDhfKiLCsIfX9l1W8drMGKhOUlwad-VDIRRliKCEc6VFo4xsG88zePSX2mATm4SiTShgT7h77Ini4gK-MAsCQp9RY~mDo~PMBVDyYeny0SDzPRo1aiwfnqyrpTskl2o~FPFXU9uaX3modmKEOeo51VJQfuTU38PjDlXFdC3Wvw-8y0eQVv7xzeroEubzUC64~P7YrRw29TsG6qsj9b-S0P-bt1yF-tJiedqNAvAo2odScrOjODJmnEO5rDgetsldI5AnX5U4GcTgMaQ__&Key-Pair-Id=K38HBHX5LX3X2H" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+
+
+        <h2>Add Item</h2>
+        <form id="add-item-form">
+            <input type="text" id="item-name" placeholder="Name" required>
+            <input type="text" id="item-description" placeholder="Description" required>
+            <button type="submit">Add Item</button>
+        </form>
+
+        <script>
+            $(document).ready(function () {
+                // Function to fetch and display items
+                function fetchItems() {
+                    $.get('http://127.0.0.1:5000/api/get-response-items', function (data) {
+                        $('#item-list').empty();
+                        data.forEach(function (item) {
+                            $('#item-list').append('<li>' + item.name + ': ' + item.description + '</li>');
+                        });
+                    });
+                }
+
+                data = { "name": 'bhavesh patil', "email": 'bhavesh.patil@bts.com', role: 'admin', 'questionid': 3, question: 'what is your age ?', answer: 'My age is 34' };
+
+                $.ajax({
+                    url: 'http://127.0.0.1:5000/api/save-response',
+                    data: JSON.stringify(data),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        'Content-Type': 'application/json'
+                    },
+                    type: 'POST',
+                    success: function (response) {
+                        return resolve(response);;
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', status, error);
+                    }
+                })
+
+                // Fetch items on page load
+                // fetchItems();
+
+                // Handle form submission
+                $('#add-item-form').submit(function (event) {
+                    event.preventDefault();
+                    const newItem = {
+                        name: $('#item-name').val(),
+                        description: $('#item-description').val()
+                    };
+
+                    $.post('/api/items', newItem, function () {
+                        fetchItems(); // Refresh the item list
+                        $('#item-name').val('');
+                        $('#item-description').val('');
                     });
                 });
-            }
-
-            data = { "name": 'bhavesh patil',  "email": 'bhavesh.patil@bts.com', role: 'admin', 'questionid': 3, question: 'what is your age ?', answer: 'My age is 34' };
-
-            $.ajax({
-                url: 'http://127.0.0.1:5000/api/save-response',
-                data: JSON.stringify(data),
-                headers: {
-                    'Accept': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/json'
-                },
-                type: 'POST',
-                success: function (response) {
-                    return resolve(response);;
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', status, error);
-                }
-            })
-
-            // Fetch items on page load
-            // fetchItems();
-
-            // Handle form submission
-            $('#add-item-form').submit(function (event) {
-                event.preventDefault();
-                const newItem = {
-                    name: $('#item-name').val(),
-                    description: $('#item-description').val()
-                };
-
-                $.post('/api/items', newItem, function () {
-                    fetchItems(); // Refresh the item list
-                    $('#item-name').val('');
-                    $('#item-description').val('');
-                });
             });
-        });
-    </script>
-</body>
+        </script>
+    </body>
 
-</html>
+    </html>
