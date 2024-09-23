@@ -24,8 +24,7 @@ def home():
 @app.route('/api/next-question', methods=['POST'])
 def get_next_question():
     item = request.json
-    role = item['role']
-    print(role)
+    role = item['role']    
     data = load_data_from_json("data.json")
     #filtered_data = [interViewRole for interViewRole in data['role'] == role]
     if role in data:
@@ -67,10 +66,9 @@ def get_response():
 @app.route('/api/save-response', methods=['POST'])
 def save_response():
     new_item = request.json
-    email = new_item['email']
-    role = new_item['role']
+    email = new_item['email']    
     data = load_data_from_json("response.json")
-    filtered_data = [item for item in data if item['email'] == email and item['role'] == role]
+    filtered_data = [item for item in data if item['email'] == email]
     if len(filtered_data) > 0:
         new_item  = {'questionid': new_item['questionid'], 'question': new_item['question'], 'answer': new_item['answer'], 'videofile': new_item['videofile']}  
         filtered_data[0]['response'].append(new_item)
@@ -79,8 +77,7 @@ def save_response():
         return jsonify({'message': 'Response updated successfully'}), 200
     else:
         new_item = {
-            'email': email,
-            'role': role,
+            'email': email,            
             'response': [
                 {
                     'questionid': new_item['questionid'],
