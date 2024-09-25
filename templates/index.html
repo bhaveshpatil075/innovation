@@ -64,7 +64,13 @@
         <div id="video-preview" style="margin-top: 15px;">
             <h2 style="display: block;"></h2>
             <img id="avatar" src="{{ url_for('static', filename='images/anna_costume1_cameraA.png') }}" style="max-width: 100%;max-height:255px">
-            <video id="avatarVideo" src="" autoplay></video>
+            <!-- <video id="avatarVideo" src="" autoplay></video> -->
+
+            <video id="avatarVideo" autoplay poster="{{ url_for('static', filename='images/anna_costume1_cameraA.png') }}">
+                <source src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
             <video id="video" autoplay muted></video>
         </div>
 

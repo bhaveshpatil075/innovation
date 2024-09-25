@@ -14,12 +14,12 @@ let pname = '';
 let email = '';
 let role = 'via';
 let fileName = '';
-let questionToAsk = 2;
+let questionToAsk = 3;
 let uniquename = getUniqueNameFromDate();
 let env = 'prod';
 let video_id
 let videoArray = []
-let preparationTime = 3000;
+let preparationTime = 0;
 
 window.onload = onLoad;
 
@@ -46,6 +46,11 @@ $('#registrationForm').on('submit', function (event) {
         $('#emailError').text('Invalid email address.').show();
         isValid = false;
     }
+
+
+
+
+
 
 
     if (isValid) {
@@ -100,26 +105,27 @@ function syncVideo(video_id, showSubmitButton = false) {
                 let video_url = res.download;
                 let duration = res.duration;
                 let delayTime = preparationTime;
-                if(duration){
+                if (duration) {
                     var drr = duration.split(':')
-                    if(drr && drr.length >= 3) {
+                    if (drr && drr.length >= 3) {
                         delayTime = convertToMilliseconds(drr[0], drr[1], drr[2]);
                     }
                 }
                 $('#avatarVideo').attr('src', video_url);
-                $('#avatar').hide();
-                $('#avatarVideo').show();                
-           
                 if (showSubmitButton == true) {
                     setTimeout(function () {
                         $('#submit').show();
                         $('#submit').removeAttr('disabled')
                         startRecording();
                     }, delayTime);
-                } else{
+                } else {
+                    if (env == 'prod') {
+                        $('#avatar').hide();
+                        $('#avatarVideo').show();
+                    }
                     setTimeout(function () {
                         $("#start").removeAttr("disabled");
-                    }, delayTime);  
+                    }, delayTime);
                 }
             }
             else {
@@ -166,19 +172,18 @@ nextQuestionButton.addEventListener('click', () => {
 
 submitButton.addEventListener('click', () => {
     $('#submit').attr('disabled', true);
-    if (currentQuestionNumber > (questionToAsk - 1)) {
-        stopRecording(true).then(() => {
-            $('#nextQuestion').show();
-            $('#nextQuestion').removeAttr('disabled');
-        });
-    } else {
-        if (currentQuestionNumber == 0)
-            currentQuestionNumber++;
-        stopRecording(true).then((resolve) => {
-            $('#nextQuestion').show();
-            $('#nextQuestion').removeAttr('disabled');
-        });
-    }
+    // if (currentQuestionNumber > (questionToAsk - 1)) {
+
+    // } else {
+    //    if (currentQuestionNumber == 0)
+    currentQuestionNumber++;
+    //}
+
+    stopRecording(true).then((resolve) => {
+        $('#nextQuestion').show();
+        $('#nextQuestion').removeAttr('disabled');
+    });
+
 });
 
 function onLoad() {
@@ -190,7 +195,7 @@ function onLoad() {
     getQuestions(role).then((response) => {
         if (response) {
             questions = response;
-            let qArray = getRandomNumbers(1, response.length - 1);
+            let qArray = getRandomNumbers(1, response.length);
             questionNumbers = qArray.slice(0, questionToAsk);
             if (env == 'prod') {
                 if (questionNumbers) {
@@ -252,15 +257,19 @@ function prepareVideo(questionId, text) {
 }
 
 function stopRecording(saveVideo = true) {
+
     return new Promise((resolve, reject) => {
+        console.log(new Date().toLocaleTimeString());
         return recorder.stopRecording(() => {
             if (saveVideo === true) {
                 uniquename = getUniqueNameFromDate();
                 let blob = recorder.getBlob();
                 let url = URL.createObjectURL(blob);
-
+                console.log(new Date().toLocaleTimeString());
                 return uploadFile(blob).then(() => {
+                    console.log(new Date().toLocaleTimeString());
                     return convertBlobToText(recordedFiles[recordedFiles.length - 1]).then((response) => {
+                        console.log(new Date().toLocaleTimeString());
                         var answer = '';
                         if (response && response.text) {
                             answer = response.text;
@@ -269,9 +278,10 @@ function stopRecording(saveVideo = true) {
                         if (answer == '') {
                             answer = 'No answer given';
                         }
-                        return saveTextToFile(email, questionId, questionName, answer, fileName).then(() => {
+                        saveTextToFile(email, questionId, questionName, answer, fileName).then(() => {
+                            console.log(new Date().toLocaleTimeString());
                             console.log('Response saved');
-                            resolve('Resolved!');
+
                             if (currentQuestionNumber == questionToAsk) {
                                 videoElement.srcObject.getTracks().forEach(track => track.stop());
                                 mediaStream.getTracks().forEach(track => track.stop());
@@ -281,16 +291,34 @@ function stopRecording(saveVideo = true) {
                                 $('.endCall').show();
                                 $('.experiment').hide();
                                 $('.profile').hide();
+                                MergeVideo('merge_video1')
 
                             }
-
                         });
+                        resolve('Resolved!');
                     });
                 });
             }
             // Stop the video stream
             //videoElement.srcObject.getTracks().forEach(track => track.stop());
             resolve('Resolved!');
+        });
+    });
+}
+
+function MergeVideo(merge_video_name) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: pythonServer + 'api/combine-video',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ 'video_arr': videoArray, 'merge_video_name': merge_video_name}),  // Send the string array as JSON
+            success: function (response) {
+                console.log('Response from server:', response);
+            },
+            error: function (xhr, status, error) {
+                console.log('Error:', error);
+            }
         });
     });
 }

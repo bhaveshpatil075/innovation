@@ -3,6 +3,7 @@ from flask_cors import CORS
 from service import text_to_speech, load_data_from_json, convert_webm_to_wav, recognize_speech_from_audio
 # from heygen import question_to_video, get_video
 from synthesia import question_to_video, get_video
+from combine-video import combine_videos
 from werkzeug.utils import secure_filename
 import os
 import json
@@ -40,8 +41,7 @@ def get_next_question():
 
 @app.route('/api/text-to-speech', methods=['POST'])
 def ai_avatar_interview():
-    new_item = request.json
-    print(new_item['item_text'])
+    new_item = request.json    
     text_to_speech(new_item['item_text'])
     return jsonify({'message': 'text-to-speech converted successfully'}), 200
 
@@ -49,9 +49,7 @@ def ai_avatar_interview():
 def video_to_text():
     new_item = request.json
     webm_file = new_item['video_file']
-    wav_file = new_item['audio_file']
-    print(webm_file)
-    print(wav_file)    
+    wav_file = new_item['audio_file']    
     convert_webm_to_wav(webm_file, wav_file)
     text = recognize_speech_from_audio(wav_file)
     return jsonify({'message': 'succefull', 'text': text}), 200
@@ -127,9 +125,16 @@ def question_video():
 def get_heygen_video():
     new_item = request.json
     video_id = new_item['video_id']
-    print(video_id)
     data = get_video(video_id)
     return data, 200
+
+@app.route('/api/combine-video', methods=['POST'])
+def combine_videos():
+    new_item = request.json
+    video_arr = new_item['video_arr']
+    merge_video_name = new_item['merge_video_name']
+    combine_videos(video_arr, merge_video_name)
+    return jsonify({'message': 'succefull'}), 200
 
 
 if __name__ == '__main__':
