@@ -1,7 +1,8 @@
 from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 from service import text_to_speech, load_data_from_json, convert_webm_to_wav, recognize_speech_from_audio
-from heygen import question_to_video, get_video
+# from heygen import question_to_video, get_video
+from synthesia import question_to_video, get_video
 from werkzeug.utils import secure_filename
 import os
 import json
@@ -16,6 +17,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/home')
 def home():
@@ -117,7 +119,8 @@ def upload_file():
 def question_video():
     new_item = request.json
     questionText = new_item['question_text']
-    data = question_to_video(questionText)
+    title = new_item['question_title']
+    data = question_to_video(questionText, title)
     return data, 200
 
 @app.route('/api/get_video', methods=['POST'])

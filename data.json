@@ -56,15 +56,19 @@
     "via": [
         {
             "id": 1,
-            "question": "I believe that my assistant Kevin sent you an e-mail regarding the purpose of this meeting.  I’m keenly interested in how Selenica can support the goals of Emland to reduce healthcare costs"
+            "question": "I believe that my assistant Kevin sent you an e-mail regarding the purpose of this meeting.  I’m keenly interested in how Selenica can support the goals of Emland to reduce healthcare costs",
+            "video_id": "9945e000-ecd4-4b01-9d68-f313cc48c127"
         },
         {
             "id": 2,
-            "question": "I would appreciate it if you could go back to your team and have them outline terms where we can reduce the costs of your drugs; specifically related to chronic illnesses"
+            "question": "I would appreciate it if you could go back to your team and have them outline terms where we can reduce the costs of your drugs; specifically related to chronic illnesses",
+            "video_id": "bbd6f06d-e035-4ee2-a658-2fc8cd9bf50c"
         },
         {
             "id": 3,
-            "question": "While not a part of my remit, the Prime Minister is keenly interested in ways to reduce poverty"
+            "question": "While not a part of my remit, the Prime Minister is keenly interested in ways to reduce poverty",
+            "video_id":""
+
         }
     ]
 }

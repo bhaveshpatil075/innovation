@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VIA avatar</title>
-    <style href="../static/css/index.css"></style>
+    <link rel="stylesheet" type="text/css" href="../static/css/index.css">
 
     <style>
         h1 span {
@@ -33,28 +33,26 @@
 </head>
 
 <body>
-    <div class="profile">
-        <form id="registrationForm">
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-                <span class="error-message" id="nameError"></span>
+    <div class="profile container">
+        <main>
+            <div class="form-container">
+                <span style="font-size: 24px; letter-spacing: 2px; font-weight: bold;">PARTICIPANT</span>
+                <form id="registrationForm" class="registrationForm">
+                    <div class="form-group" style="display: flex;">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required>
+                        <span class="error-message" id="nameError"></span>
+                    </div>
+                    <div class="form-group" style="display: flex;">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                        <span class="error-message" id="emailError"></span>
+                    </div>                 
+                    <button type="submit">Submit</button>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-                <span class="error-message" id="emailError"></span>
-            </div>
-            <!-- <div class="form-group">
-                <label for="role">Role:</label>
-                <select id="role" name="role" required>
-                    <option value="">Select a role</option>
-                    <option value="admin">Admin</option>
-                </select>
-                <span class="error-message" id="roleError"></span>
-            </div> -->
-            <button type="submit">Submit</button>
-        </form>
+        </main>
+        
     </div>
 
     <section class="experiment" style="text-align: center;">
@@ -65,7 +63,7 @@
 
         <div id="video-preview" style="margin-top: 15px;">
             <h2 style="display: block;"></h2>
-            <img id="avatar" src="{{ url_for('static', filename='images/heygen-avatar.png') }}" style="max-width: 100%;max-height:255px">
+            <img id="avatar" src="{{ url_for('static', filename='images/anna_costume1_cameraA.png') }}" style="max-width: 100%;max-height:255px">
             <video id="avatarVideo" src="" autoplay></video>
             <video id="video" autoplay muted></video>
         </div>

@@ -14,9 +14,9 @@ let pname = '';
 let email = '';
 let role = 'via';
 let fileName = '';
-let questionToAsk = 3;
+let questionToAsk = 2;
 let uniquename = getUniqueNameFromDate();
-let env = 'local';
+let env = 'prod';
 let video_id
 let videoArray = []
 let preparationTime = 3000;
@@ -62,17 +62,19 @@ $('#registrationForm').on('submit', function (event) {
         $('#submit').hide();
         startRecording().then(() => {
             if (env == 'prod') {
-                // prepareVideo(-1, "Hello " + pname + ", welcome to your interview.").then(function (response) {
-                //     if (video_id) {
-                //         setTimeout(function () {
-                //             syncVideo(video_id);
-                //             $("#start").removeAttr("disabled");
-                //         }, 15000);
-                //     } else {
-                textToSpeech("Hello " + pname + ", welcome to your interview.").then(function () {
-                    $("#start").removeAttr("disabled");
-                });
-                //     }
+                //prepareVideo(-1, "Hello " + pname + ", welcome to your interview.").then(function (response) {
+                //if (video_id) {
+                setTimeout(function () {
+                    let videoid = '77c3961b-84db-4ec5-91cc-a679bb6af7fe'
+                    syncVideo(videoid);
+                }, preparationTime);
+                //}
+
+                // else {
+                //     textToSpeech("Hello " + pname + ", welcome to your interview.").then(function () {
+                //         $("#start").removeAttr("disabled");
+                //     });
+                // }
                 // });
 
             } else {
@@ -85,30 +87,47 @@ $('#registrationForm').on('submit', function (event) {
     }
 })
 
-function syncVideo(video_id) {
+function syncVideo(video_id, showSubmitButton = false) {
     console.log(new Date().toLocaleTimeString());
     getVideo(video_id).then(function (res1) {
         res = JSON.parse(res1);
-        if (res['data']) {
-            if (res['data'].status == "processing") {
+        if (res) {
+            if (res.status == "in_progress") {
                 setTimeout(function () {
                     syncVideo(video_id);
                 }, 10000);
-            } else if (res['data'].status == 'completed') {
-                let video_url = res['data'].video_url;
+            } else if (res.status == 'complete') {
+                let video_url = res.download;
+                let duration = res.duration;
+                let delayTime = preparationTime;
+                if(duration){
+                    var drr = duration.split(':')
+                    if(drr && drr.length >= 3) {
+                        delayTime = convertToMilliseconds(drr[0], drr[1], drr[2]);
+                    }
+                }
                 $('#avatarVideo').attr('src', video_url);
-                $('#avatarVideo').show();
                 $('#avatar').hide();
-                $("#start").removeAttr("disabled");
-            } else {
-                textToSpeech("Hello " + pname + ", welcome to your interview.").then(function () {
-                    $("#start").removeAttr("disabled");
-                });
+                $('#avatarVideo').show();                
+           
+                if (showSubmitButton == true) {
+                    setTimeout(function () {
+                        $('#submit').show();
+                        $('#submit').removeAttr('disabled')
+                        startRecording();
+                    }, delayTime);
+                } else{
+                    setTimeout(function () {
+                        $("#start").removeAttr("disabled");
+                    }, delayTime);  
+                }
             }
-        } else {
-            textToSpeech("Hello " + pname + ", welcome to your interview.").then(function () {
-                $("#start").removeAttr("disabled");
-            });
+            else {
+                console.log('getVideo error occured 1');
+            }
+        }
+        else {
+            console.log('getVideo error occured 2');
         }
     })
 }
@@ -126,7 +145,13 @@ stopButton.click(() => {
     });
 });
 
+function convertToMilliseconds(hours, minutes, seconds) {
+    const hoursToMilliseconds = hours * 3600 * 1000;
+    const minutesToMilliseconds = minutes * 60 * 1000;
+    const secondsToMilliseconds = seconds * 1000;
 
+    return hoursToMilliseconds + minutesToMilliseconds + secondsToMilliseconds;
+}
 
 // // Function to start recording
 start.addEventListener('click', async () => {
@@ -176,14 +201,20 @@ function onLoad() {
                             item = item[0];
                             questionId = item['id'];
                             questionName = item['question'];
-                            prepareVideo(questionId, questionName)
+                            if (!item['video_id']) {
+                                prepareVideo(questionId, questionName);
+                            } else {
+                                let obj =
+                                {
+                                    "questionId": questionId,
+                                    "video_id": item['video_id']
+                                };
+                                videoArray.push(obj);
+                            }
                         }
-
                     }
                 }
-
             }
-
         }
     });
 
@@ -193,29 +224,20 @@ function startInterview() {
     $('.endCall').hide();
     $('.experiment').show();
     $('#submit').hide();
-    // getQuestions(role).then((response) => {
-    //     if (response) {
-    //         questions = response;
-    //         let qArray = getRandomNumbers(1, response.length - 1);
-    //         questionNumbers = qArray.slice(0, questionToAsk);
 
     startRecording().then(() => {
         nextQuestion();
-
-
     });
-    //     }
-    // });
-
 }
 
 function prepareVideo(questionId, text) {
     return new Promise((resolve, reject) => {
-        return textToVideo(text).then(function (response) {
+        let title = "Question " + questionId
+        return textToVideo(text, title).then(function (response) {
             if (response) {
                 let res = JSON.parse(response);
-                if (res['data']) {
-                    video_id = res['data'].video_id;
+                if (res) {
+                    video_id = res.id;
                     let obj =
                     {
                         "questionId": questionId,
@@ -315,13 +337,12 @@ function nextQuestion() {
                 questionId = item['id'];
                 questionName = item['question'];
                 if (env == 'prod') {
-                    videoArray.filter(x => x.questionId == questionId);
-                    if (videoArray && videoArray[0]) {
-                        let video_id = videoArray[0].video_id;
+                    let video = videoArray.filter(x => x.questionId == questionId);
+                    if (video && video[0]) {
+                        let video_id = video[0].video_id;
                         setTimeout(function () {
-                            syncVideo(video_id);
-                        }, 15000);
-                        startRecording();
+                            syncVideo(video_id, true);
+                        }, preparationTime);
                     }
                 } else {
                     textToSpeech(questionName, true).then(() => {
@@ -426,9 +447,9 @@ function textToSpeech(question, showSubmitButton = false) {
     });
 }
 
-function textToVideo(question) {
+function textToVideo(question, title) {
     return new Promise((resolve, reject) => {
-        data = { "question_text": question };
+        data = { "question_text": question, "question_title": title };
 
         $.ajax({
             url: pythonServer + '/api/question-to-video',
