@@ -24,9 +24,9 @@ def combine_videos(arr, output):
     os.remove('inputs.txt')
 
 # Example usage
-# video1 =  '20240925_154709_761.webm'
-# video2 = '20240925_155859_813.webm'
-# output_video = 'merged_video5.mp4'
+# video1 = 'my_video.mp4'   # Replace with the first video's path
+# video2 = 'my_video2.mp4'   # Replace with the second video's path
+# output_video = 'output_merged_video1.mp4'  # Output file path
 
-# arr  = [video1, video2]
+# arr  = [video1,'20240926_201352_890.mp4', video2, '20240926_201417_658.mp4',]
 # combine_videos(arr, output_video)

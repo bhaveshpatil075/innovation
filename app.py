@@ -1,9 +1,9 @@
 from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
-from service import text_to_speech, load_data_from_json, convert_webm_to_wav, recognize_speech_from_audio
+from service import text_to_speech, load_data_from_json, convert_webm_to_wav, recognize_speech_from_audio, convert_webm_to_mp4, download_video
 # from heygen import question_to_video, get_video
 from synthesia import question_to_video, get_video
-from combine-video import combine_videos
+from combinevideo import combine_videos
 from werkzeug.utils import secure_filename
 import os
 import json
@@ -104,10 +104,14 @@ def upload_file():
     if file:
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        newfilepath = os.path.join(app.config['UPLOAD_FOLDER'], filename.replace('webm','mp4'))
         print(filepath)
         if os.path.exists(filepath):
             os.remove(filepath)
         file.save(filepath)
+
+        convert_webm_to_mp4(filepath, newfilepath)
+        
         return jsonify({'message': 'File uploaded successfully'}), 200
     else:
        return jsonify({'message': 'Function not implemented'}), 500
@@ -125,11 +129,14 @@ def question_video():
 def get_heygen_video():
     new_item = request.json
     video_id = new_item['video_id']
-    data = get_video(video_id)
-    return data, 200
+    text = get_video(video_id)
+    data = json.loads(text)    
+    if(data['status'] == "complete"):
+        download_video(data['download'], 'uploads', data['title'].replace(' ', '_'))    
+    return text, 200
 
 @app.route('/api/combine-video', methods=['POST'])
-def combine_videos():
+def merge_videos():
     new_item = request.json
     video_arr = new_item['video_arr']
     merge_video_name = new_item['merge_video_name']

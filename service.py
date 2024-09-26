@@ -1,3 +1,4 @@
+import requests
 import os
 import speech_recognition as sr
 from gtts import gTTS
@@ -33,6 +34,16 @@ def convert_webm_to_wav(webm_file_path, wav_file_path):
     ]
     subprocess.run(command, check=True)
 
+def convert_webm_to_mp4(input_path, output_path):
+    try:
+        # ffmpeg command to convert webm to mp4
+        subprocess.run(['ffmpeg', '-i', input_path, output_path], check=True)
+        if os.path.exists(input_path):
+            os.remove(input_path)
+        print(f"Converted {input_path} to {output_path}")
+    except Exception as e:
+        print(f"Error during conversion: {e}")
+
 # Function to recognize speech from an audio file
 def recognize_speech_from_audio(file_path):
     try:
@@ -54,3 +65,25 @@ def recognize_speech_from_audio(file_path):
     except sr.UnknownValueError:
         # Speech was unintelligible
         print("Unable to recognize any speech.")
+
+def download_video(url, folder_path, file_name):    
+    file_name = file_name.replace('-','') + '.mp4'
+    file_path = os.path.join(folder_path, file_name)    
+    if os.path.exists(file_path):
+        return
+
+    # Send a request to the URL
+    response = requests.get(url, stream=True)
+    
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Open a file in the folder to save the video
+        with open(file_path, 'wb') as video_file:
+            # Write the video content in chunks to avoid memory issues
+            for chunk in response.iter_content(chunk_size=1024):
+                if chunk:
+                    video_file.write(chunk)
+        
+        print(f"Video saved as {file_path}")
+    else:
+        print(f"Failed to download video. Status code: {response.status_code}")

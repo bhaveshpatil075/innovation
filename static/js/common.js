@@ -48,11 +48,6 @@ $('#registrationForm').on('submit', function (event) {
     }
 
 
-
-
-
-
-
     if (isValid) {
         $('.profile').hide();
         $('.experiment').show();
@@ -172,13 +167,7 @@ nextQuestionButton.addEventListener('click', () => {
 
 submitButton.addEventListener('click', () => {
     $('#submit').attr('disabled', true);
-    // if (currentQuestionNumber > (questionToAsk - 1)) {
-
-    // } else {
-    //    if (currentQuestionNumber == 0)
     currentQuestionNumber++;
-    //}
-
     stopRecording(true).then((resolve) => {
         $('#nextQuestion').show();
         $('#nextQuestion').removeAttr('disabled');
@@ -195,27 +184,21 @@ function onLoad() {
     getQuestions(role).then((response) => {
         if (response) {
             questions = response;
-            let qArray = getRandomNumbers(1, response.length);
-            questionNumbers = qArray.slice(0, questionToAsk);
             if (env == 'prod') {
-                if (questionNumbers) {
-                    for (let m = 0; m < questionNumbers.length; m++) {
-                        let number = questionNumbers[m]
-                        let item = questions.filter(x => x.id == number);
-                        if (item && item.length > 0) {
-                            item = item[0];
-                            questionId = item['id'];
-                            questionName = item['question'];
-                            if (!item['video_id']) {
-                                prepareVideo(questionId, questionName);
-                            } else {
-                                let obj =
-                                {
-                                    "questionId": questionId,
-                                    "video_id": item['video_id']
-                                };
-                                videoArray.push(obj);
-                            }
+                if (questions) {
+                    for (let m = 0; m < questions.length; m++) {
+                        let item = questions[m];
+                        questionId = item['id'];
+                        questionName = item['question'];
+                        if (!item['video_id']) {
+                            prepareVideo(questionId, questionName);
+                        } else {
+                            let obj =
+                            {
+                                "questionId": questionId,
+                                "video_id": item['video_id']
+                            };
+                            videoArray.push(obj);
                         }
                     }
                 }
@@ -237,7 +220,7 @@ function startInterview() {
 
 function prepareVideo(questionId, text) {
     return new Promise((resolve, reject) => {
-        let title = "Question " + questionId
+        let title = "Question_" + questionId
         return textToVideo(text, title).then(function (response) {
             if (response) {
                 let res = JSON.parse(response);
@@ -257,7 +240,6 @@ function prepareVideo(questionId, text) {
 }
 
 function stopRecording(saveVideo = true) {
-
     return new Promise((resolve, reject) => {
         console.log(new Date().toLocaleTimeString());
         return recorder.stopRecording(() => {
@@ -278,7 +260,7 @@ function stopRecording(saveVideo = true) {
                         if (answer == '') {
                             answer = 'No answer given';
                         }
-                        saveTextToFile(email, questionId, questionName, answer, fileName).then(() => {
+                        saveTextToFile(email, questionId, questionName, answer, uniquename + '.mp4').then(() => {
                             console.log(new Date().toLocaleTimeString());
                             console.log('Response saved');
 
@@ -291,7 +273,8 @@ function stopRecording(saveVideo = true) {
                                 $('.endCall').show();
                                 $('.experiment').hide();
                                 $('.profile').hide();
-                                MergeVideo('merge_video1')
+
+                                //mergeVideo(email);
 
                             }
                         });
@@ -306,13 +289,13 @@ function stopRecording(saveVideo = true) {
     });
 }
 
-function MergeVideo(merge_video_name) {
+function mergeVideo(merge_video_name) {
     return new Promise((resolve, reject) => {
         $.ajax({
             url: pythonServer + 'api/combine-video',
             type: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify({ 'video_arr': videoArray, 'merge_video_name': merge_video_name}),  // Send the string array as JSON
+            data: JSON.stringify({ 'video_arr': videoArray, 'merge_video_name': merge_video_name }),  // Send the string array as JSON
             success: function (response) {
                 console.log('Response from server:', response);
             },
@@ -354,31 +337,24 @@ function getQuestions(role) {
 
 function nextQuestion() {
     if (currentQuestionNumber < questionToAsk) {
-        let number = questionNumbers[currentQuestionNumber]
-        if (currentQuestionNumber != 0)
-            currentQuestionNumber++;
 
-        if (number) {
-            let item = questions.filter(x => x.id == number);
-            if (item && item.length > 0) {
-                item = item[0];
-                questionId = item['id'];
-                questionName = item['question'];
-                if (env == 'prod') {
-                    let video = videoArray.filter(x => x.questionId == questionId);
-                    if (video && video[0]) {
-                        let video_id = video[0].video_id;
-                        setTimeout(function () {
-                            syncVideo(video_id, true);
-                        }, preparationTime);
-                    }
-                } else {
-                    textToSpeech(questionName, true).then(() => {
-                        startRecording();
-                    });
-                }
+        let item = questions[currentQuestionNumber];
+        questionId = item['id'];
+        questionName = item['question'];
+        if (env == 'prod') {
+            let video = videoArray.filter(x => x.questionId == questionId);
+            if (video && video[0]) {
+                let video_id = video[0].video_id;
+                setTimeout(function () {
+                    syncVideo(video_id, true);
+                }, preparationTime);
             }
+        } else {
+            textToSpeech(questionName, true).then(() => {
+                startRecording();
+            });
         }
+
     } else {
         $('.endCall').show();
         $('.experiment').hide();
@@ -387,7 +363,7 @@ function nextQuestion() {
 
 function convertBlobToText(fileName) {
     return new Promise((resolve, reject) => {
-        let audio = fileName.indexOf('.webm') > -1 ? fileName.replace('.webm', '.wav') : fileName;
+        let audio = fileName.indexOf('.mp4') > -1 ? fileName.replace('.mp4', '.wav') : fileName;
         let videoFileName = 'uploads/' + fileName;
         let audioFileName = 'uploads/' + audio;
 
@@ -416,7 +392,6 @@ function convertBlobToText(fileName) {
 
 function saveTextToFile(email, questionid, question, answer, fileName) {
     return new Promise((resolve, reject) => {
-        // data = { "name": 'bhavesh patil',  "email": 'bhavesh.patil@bts.com', 'questionid': 3, question: 'what is your age ?', answer: 'My age is 34' };
         data = { "email": email, 'questionid': questionid, 'question': question, 'answer': answer, 'videofile': fileName };
 
         $.ajax({
@@ -528,7 +503,7 @@ function uploadFile(recordedBlob) {
         const formData = new FormData();
         // generating a random file name
         fileName = uniquename + '.webm';
-        recordedFiles.push(fileName);
+        recordedFiles.push(uniquename + '.mp4');
 
         formData.append('file', recordedBlob, fileName);
 
