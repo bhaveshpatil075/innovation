@@ -1,99 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flask API with jQuery</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Analysis Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .button-bar {
+            display: flex;
+            justify-content: center;
+            background-color: #f4f4f4;
+            padding: 10px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-bar button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .button-bar button:hover {
+            background-color: #555;
+        }
+
+        .main-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .toggle-div {
+            display: none;
+            padding: 20px;
+            margin: 20px auto;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            width: 80%;
+        }
+
+        .toggle-div.active {
+            display: block;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+        }
+    </style>
 </head>
-
 <body>
-    <h1>Flask API with jQuery</h1>
 
-    <h2>Items</h2>
-    <ul id="item-list"></ul>
+    <!-- Navbar -->
+    <div class="navbar">
+        <h1>Analysis Dashboard</h1>
+    </div>
 
+    <!-- Button bar with horizontal buttons -->
+    <div class="button-bar">
+        <button onclick="toggleDiv('div1')">Show Div 1</button>
+        <button onclick="toggleDiv('div2')">Show Analysis</button>
+        <button onclick="toggleDiv('div3')">Show Div 3</button>
+    </div>
 
-    <!DOCTYPE html>
-    <html lang="en">
+    <!-- Main content area -->
+    <div class="main-content">
+        <div id="div1" class="toggle-div">
+            <h2>Questions and Answers</h2>
+            <div class="qa-section">
+                {% for result in data['results'] %}
+                <div class="qa-item">
+                    <h3>Question {{ loop.index }}: {{ result['question'] }}</h3>
+                    <p><strong>Answer:</strong> {{ result['answer'] }}</p>
+                    <video controls>
+                        <source src="{{ url_for('output_files', filename=result['videofile']) }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <hr>
+                {% endfor %}
+            </div>
+        </div>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>HeyGen Video</title>
-    </head>
+        <div id="div2" class="toggle-div">
+            <h2>Overall Sentiment and Emotion Percentages</h2>
+            <div>
+                <h3>Sentiment Percentages</h3>
+                <p>Positive: {{ data['overall_sentiment_percentages']['Positive'] }}%</p>
+                <p>Neutral: {{ data['overall_sentiment_percentages']['Neutral'] }}%</p>
+                <p>Negative: {{ data['overall_sentiment_percentages']['Negative'] }}%</p>
+            </div>
 
-    <body>
+            <div>
+                <h3>Emotion Percentages</h3>
+                <p>Angry: {{ data['overall_emotion_percentages']['angry'] }}%</p>
+                <p>Disgust: {{ data['overall_emotion_percentages']['disgust'] }}%</p>
+                <p>Fear: {{ data['overall_emotion_percentages']['fear'] }}%</p>
+                <p>Happy: {{ data['overall_emotion_percentages']['happy'] }}%</p>
+                <p>Sad: {{ data['overall_emotion_percentages']['sad'] }}%</p>
+                <p>Surprise: {{ data['overall_emotion_percentages']['surprise'] }}%</p>
+                <p>Neutral: {{ data['overall_emotion_percentages']['neutral'] }}%</p>
+            </div>
 
-        <h1>Embedded HeyGen Video</h1>
+            <!-- Display charts -->
+            <!-- <div>
+                <h3>Sentiment Analysis Chart</h3>
+                <img src="{{ url_for('output_files', filename='sentiment_analysis_chart.png') }}" alt="Sentiment Analysis Chart">
+            </div>
 
-        <!-- Replace the 'VIDEO_LINK' with your HeyGen video link -->
-        <!-- <iframe src="" width="560" height="315" frameborder="0" allowfullscreen></iframe> -->
+            <div>
+                <h3>Emotion Analysis Chart</h3>
+                <img src="{{ url_for('output_files', filename='emotion_analysis_chart.png') }}" alt="Emotion Analysis Chart">
+            </div>
 
-        <video width="560" height="315" controls>
-            <source src="https://files2.heygen.ai/aws_pacific/avatar_tmp/0cdfa4d948284052a5e10abb1d3da94e/813eef26e890401099d8a150c82e87c3.webm?Expires=1726757591&Signature=PoyX9MHX4~J3R5DY75V8oUSov2RzOyr40ciFwy2QyjgZJJvEkDU4eY8SXQP9JPamesNuWs8FDhfKiLCsIfX9l1W8drMGKhOUlwad-VDIRRliKCEc6VFo4xsG88zePSX2mATm4SiTShgT7h77Ini4gK-MAsCQp9RY~mDo~PMBVDyYeny0SDzPRo1aiwfnqyrpTskl2o~FPFXU9uaX3modmKEOeo51VJQfuTU38PjDlXFdC3Wvw-8y0eQVv7xzeroEubzUC64~P7YrRw29TsG6qsj9b-S0P-bt1yF-tJiedqNAvAo2odScrOjODJmnEO5rDgetsldI5AnX5U4GcTgMaQ__&Key-Pair-Id=K38HBHX5LX3X2H" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
+            <div>
+                <h3>Word Cloud</h3>
+                <img src="{{ url_for('output_files', filename='wordcloud_answers.png') }}" alt="Word Cloud">
+            </div> -->
+        </div>
 
+        <div id="div3" class="toggle-div">
+            <div>
+                <h3>Sentiment Analysis Chart</h3>
+                <img src="{{ url_for('output_files', filename='sentiment_analysis_chart.png') }}" alt="Sentiment Analysis Chart">
+            </div>
 
-        <h2>Add Item</h2>
-        <form id="add-item-form">
-            <input type="text" id="item-name" placeholder="Name" required>
-            <input type="text" id="item-description" placeholder="Description" required>
-            <button type="submit">Add Item</button>
-        </form>
+            <div>
+                <h3>Emotion Analysis Chart</h3>
+                <img src="{{ url_for('output_files', filename='emotion_analysis_chart.png') }}" alt="Emotion Analysis Chart">
+            </div>
 
-        <script>
-            $(document).ready(function () {
-                // Function to fetch and display items
-                function fetchItems() {
-                    $.get('http://127.0.0.1:5000/api/get-response-items', function (data) {
-                        $('#item-list').empty();
-                        data.forEach(function (item) {
-                            $('#item-list').append('<li>' + item.name + ': ' + item.description + '</li>');
-                        });
-                    });
-                }
+            <div>
+                <h3>Word Cloud</h3>
+                <img src="{{ url_for('output_files', filename='wordcloud_answers.png') }}" alt="Word Cloud">
+            </div>
+        </div>
+    </div>
 
-                data = { "name": 'bhavesh patil', "email": 'bhavesh.patil@bts.com', role: 'admin', 'questionid': 3, question: 'what is your age ?', answer: 'My age is 34' };
-
-                $.ajax({
-                    url: 'http://127.0.0.1:5000/api/save-response',
-                    data: JSON.stringify(data),
-                    headers: {
-                        'Accept': 'application/json',
-                        'Access-Control-Allow-Origin': '*',
-                        'Content-Type': 'application/json'
-                    },
-                    type: 'POST',
-                    success: function (response) {
-                        return resolve(response);;
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error:', status, error);
-                    }
-                })
-
-                // Fetch items on page load
-                // fetchItems();
-
-                // Handle form submission
-                $('#add-item-form').submit(function (event) {
-                    event.preventDefault();
-                    const newItem = {
-                        name: $('#item-name').val(),
-                        description: $('#item-description').val()
-                    };
-
-                    $.post('/api/items', newItem, function () {
-                        fetchItems(); // Refresh the item list
-                        $('#item-name').val('');
-                        $('#item-description').val('');
-                    });
-                });
+    <script>
+        function toggleDiv(divId) {
+            var divs = document.querySelectorAll('.toggle-div');
+            divs.forEach(function(div) {
+                div.classList.remove('active');
             });
-        </script>
-    </body>
+            var selectedDiv = document.getElementById(divId);
+            selectedDiv.classList.add('active');
+        }
+    </script>
 
-    </html>
+</body>
+</html>

@@ -114,10 +114,10 @@ function syncVideo(video_id, showSubmitButton = false) {
                         startRecording();
                     }, delayTime);
                 } else {
-                    if (env == 'prod') {
-                        $('#avatar').hide();
-                        $('#avatarVideo').show();
-                    }
+                    // if (env == 'prod') {
+                    //     $('#avatar').hide();
+                    //     $('#avatarVideo').show();
+                    // }
                     setTimeout(function () {
                         $("#start").removeAttr("disabled");
                     }, delayTime);
@@ -178,7 +178,7 @@ submitButton.addEventListener('click', () => {
 function onLoad() {
     $('.experiment').hide();
     $('.endCall').hide();
-    $('#avatarVideo').hide();
+    //$('#avatarVideo').hide();
     $('#startButton').attr('disabled', true)
 
     getQuestions(role).then((response) => {
@@ -573,29 +573,29 @@ function getUniqueNameFromDate() {
     return uniqueName;
 }
 
-function getRandomNumbers(low, high) {
-    // Ensure low and high are integers
-    low = Math.floor(low);
-    high = Math.floor(high);
+// function getRandomNumbers(low, high) {
+//     // Ensure low and high are integers
+//     low = Math.floor(low);
+//     high = Math.floor(high);
 
-    if (low > high) {
-        throw new Error("Low number must be less than or equal to high number.");
-    }
+//     if (low > high) {
+//         throw new Error("Low number must be less than or equal to high number.");
+//     }
 
-    // Generate an array of numbers from low to high
-    const numbers = [];
-    for (let i = low; i <= high; i++) {
-        //if (numbers.indexOf(i) > -1) {
-        numbers.push(i);
-        //}
-    }
+//     // Generate an array of numbers from low to high
+//     const numbers = [];
+//     for (let i = low; i <= high; i++) {
+//         //if (numbers.indexOf(i) > -1) {
+//         numbers.push(i);
+//         //}
+//     }
 
-    // Shuffle the array using the Fisher-Yates algorithm
-    for (let i = numbers.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [numbers[i], numbers[j]] = [numbers[j], numbers[i]]; // Swap elements
-    }
+//     // Shuffle the array using the Fisher-Yates algorithm
+//     for (let i = numbers.length - 1; i > 0; i--) {
+//         const j = Math.floor(Math.random() * (i + 1));
+//         [numbers[i], numbers[j]] = [numbers[j], numbers[i]]; // Swap elements
+//     }
 
-    return numbers;
-}
+//     return numbers;
+// }
 
