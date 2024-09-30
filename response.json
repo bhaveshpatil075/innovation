@@ -12,188 +12,88 @@
         ]
     },
     {
-        "email": "",
-        "role": "admin",
-        "response": [
-            {
-                "questionid": 1,
-                "question": "What is your name?",
-                "answer": null,
-                "videofile": "Bhavesh_Patil_20240913_172731_225.webm"
-            },
-            {
-                "questionid": 4,
-                "question": "What is your experience?",
-                "answer": null,
-                "videofile": "Bhavesh_Patil_20240913_172839_179.webm"
-            },
-            {
-                "questionid": 3,
-                "question": "What is your education?",
-                "answer": null,
-                "videofile": "Bhavesh_Patil_20240913_173336_282.webm"
-            },
-            {
-                "questionid": 1,
-                "question": "What is your name?",
-                "answer": null,
-                "videofile": "Bhavesh_Patil_20240913_173513_418.webm"
-            },
-            {
-                "questionid": 3,
-                "question": "What is your education?",
-                "answer": null,
-                "videofile": "Bhavesh_Patil_20240913_175314_626.webm"
-            },
-            {
-                "questionid": 2,
-                "question": "What is your age?",
-                "answer": null,
-                "videofile": "Bhavesh_Patil_20240913_175314_626.webm"
-            },
-            {
-                "questionid": 1,
-                "question": "What is your name?",
-                "answer": null,
-                "videofile": "Bhavesh_Patil_20240913_175314_626.webm"
-            }
-        ]
-    },
-    {
-        "email": "bhaveshpatil075@gmail.com",
-        "role": "admin",
-        "response": [
-            {
-                "questionid": 1,
-                "question": "What is your name?",
-                "answer": null,
-                "videofile": "Bhavesh_Patil_20240913_180841_533.webm"
-            }
-        ]
-    },
-    {
-        "email": "bhaveshpatil101@gmail.com",
-        "role": "admin",
-        "response": [
-            {
-                "questionid": 2,
-                "question": "What is your age?",
-                "answer": "starting Shuru Hone ke bad Mein usne question poochha Kuchh Samay ke bad Mein yah usko yah do button active Ho Jaenge skip karna hai question to skip kar sakta hai finish sub",
-                "videofile": "Bhavesh_Patil_20240917_170743_358.webm"
-            },
-            {
-                "questionid": 3,
-                "question": "What is your education?",
-                "answer": "Aane Wale hain aap feedback kam bolna Kisi question ka answer Nahin Dena Chahta To Nahin de sakte ho han theek hai vaise bhi kar sakte hain",
-                "videofile": "Bhavesh_Patil_20240917_170743_358.webm"
-            }
-        ]
-    },
-    {
-        "email": "bhaveshpatil1075@gmail.com",
-        "role": "admin",
-        "response": [
-            {
-                "questionid": 3,
-                "question": "What is your education?",
-                "answer": null,
-                "videofile": "Bhavesh_Patil_20240918_154209_275.webm"
-            }
-        ]
-    },
-    {
-        "email": "bhaveshpatil5675@gmail.com",
-        "role": "admin",
-        "response": [
-            {
-                "questionid": 4,
-                "question": "What is your experience?",
-                "answer": null,
-                "videofile": "Bhavesh_Patil_20240918_154504_430.webm"
-            }
-        ]
-    },
-    {
-        "email": "bhavesh.patil45@bts.com",
-        "role": "admin",
-        "response": [
-            {
-                "questionid": 4,
-                "question": "What is your experience?",
-                "answer": null,
-                "videofile": "Bhavesh_Patil_20240918_154608_828.webm"
-            }
-        ]
-    },
-    {
         "email": "bhavesh.patil@bts.com",
-        "role": "admin",
         "response": [
             {
-                "questionid": 4,
-                "question": "What is your experience?",
-                "answer": null,
-                "videofile": "Bhavesh_Patil_20240918_154720_127.webm"
+                "questionid": 1,
+                "question": "I believe that my assistant Kevin sent you an e-mail regarding the purpose of this meeting.  I\u00e2\u20ac\u2122m keenly interested in how Selenica can support the goals of Emland to reduce healthcare costs",
+                "answer": "ok we will try to reduce the Healthcare cost",
+                "videofile": "20240930_140555_678.mp4"
             },
             {
                 "questionid": 2,
-                "question": "What is your age?",
-                "answer": null,
-                "videofile": "Bhavesh_Patil_20240918_154907_343.webm"
+                "question": "I would appreciate it if you could go back to your team and have them outline terms where we can reduce the costs of your drugs; specifically related to chronic illnesses",
+                "answer": "ok we will try to reduce the cost of medicine specifically related to the chronicle illness",
+                "videofile": "20240930_140633_658.mp4"
             },
             {
-                "questionid": 1,
-                "question": "What is your name?",
-                "answer": null,
-                "videofile": "Bhavesh_Patil_20240918_155138_047.webm"
+                "questionid": 3,
+                "question": "While not a part of my remit, the Prime Minister is keenly interested in ways to reduce poverty",
+                "answer": "OK Google try to reduce the poverty",
+                "videofile": "20240930_140711_632.mp4"
             }
         ]
     },
     {
-        "email": "sudhakarpatil8412@gmail.com",
-        "role": "admin",
+        "email": "bhaveshpatil375@gmail.com",
         "response": [
             {
-                "questionid": 4,
-                "question": "What is your experience?",
-                "answer": null,
-                "videofile": "Bhavesh_Patil_20240918_161545_716.webm"
-            },
-            {
-                "questionid": 3,
-                "question": "What is your education?",
-                "answer": null,
-                "videofile": "Bhavesh_Patil_20240918_161545_716.webm"
+                "questionid": 1,
+                "question": "I believe that my assistant Kevin sent you an e-mail regarding the purpose of this meeting.  I\u00e2\u20ac\u2122m keenly interested in how Selenica can support the goals of Emland to reduce healthcare costs",
+                "answer": "ok we will try to reduce Healthcare cause thank you",
+                "videofile": "20240930_142242_404.mp4"
             },
             {
                 "questionid": 2,
-                "question": "What is your age?",
-                "answer": null,
-                "videofile": "Bhavesh_Patil_20240918_161545_716.webm"
+                "question": "I would appreciate it if you could go back to your team and have them outline terms where we can reduce the costs of your drugs; specifically related to chronic illnesses",
+                "answer": "OK Google try to reduce the cost of drug specifically related to the chronicle illness",
+                "videofile": "20240930_142310_117.mp4"
+            },
+            {
+                "questionid": 3,
+                "question": "While not a part of my remit, the Prime Minister is keenly interested in ways to reduce poverty",
+                "answer": "ok we will try to reduce the poverty thank you",
+                "videofile": "20240930_142347_290.mp4"
             }
         ]
     },
     {
         "email": "anke.jegers@mdlz.com",
-        "role": "admin",
         "response": [
             {
+                "questionid": 1,
+                "question": "I believe that my assistant Kevin sent you an e-mail regarding the purpose of this meeting.  I\u00e2\u20ac\u2122m keenly interested in how Selenica can support the goals of Emland to reduce healthcare costs",
+                "answer": "OK Google try to reduce the Healthcare cost",
+                "videofile": "20240930_142524_745.mp4"
+            },
+            {
                 "questionid": 2,
-                "question": "What is your age?",
-                "answer": "I am 30 years old",
-                "videofile": "Bhavesh_Patil_20240918_161803_018.webm"
+                "question": "I would appreciate it if you could go back to your team and have them outline terms where we can reduce the costs of your drugs; specifically related to chronic illnesses",
+                "answer": "ok we will try to reduce the cost specifically related to the chronicle illness",
+                "videofile": "20240930_142554_933.mp4"
             },
             {
                 "questionid": 3,
-                "question": "What is your education?",
-                "answer": "MPSC it graduate",
-                "videofile": "Bhavesh_Patil_20240918_161803_018.webm"
-            },
+                "question": "While not a part of my remit, the Prime Minister is keenly interested in ways to reduce poverty",
+                "answer": "OK Google try to reduce the poverty",
+                "videofile": "20240930_142621_765.mp4"
+            }
+        ]
+    },
+    {
+        "email": "sudhakarpatil8412@gmail.com",
+        "response": [
             {
                 "questionid": 1,
-                "question": "What is your name?",
-                "answer": "my name is Bhavesh Patil",
-                "videofile": "Bhavesh_Patil_20240918_161803_018.webm"
+                "question": "I believe that my assistant Kevin sent you an e-mail regarding the purpose of this meeting.  I\u00e2\u20ac\u2122m keenly interested in how Selenica can support the goals of Emland to reduce healthcare costs",
+                "answer": "ok we will do that",
+                "videofile": "20240930_171727_558.mp4"
+            },
+            {
+                "questionid": 2,
+                "question": "I would appreciate it if you could go back to your team and have them outline terms where we can reduce the costs of your drugs; specifically related to chronic illnesses",
+                "answer": "vah Jo bol rahe hain",
+                "videofile": "20240930_171807_255.mp4"
             }
         ]
     }

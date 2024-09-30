@@ -3,7 +3,7 @@ let mediaStream;
 let videoElement = document.getElementById('video');
 let startButton = document.getElementById('start');
 let stopButton = $('#stop');
-let questionNumbers = [];
+let questionArr = [];
 let currentQuestionNumber = 0;
 let nextQuestionButton = document.getElementById('nextQuestion');
 let submitButton = document.getElementById('submit');
@@ -12,14 +12,15 @@ let recordedFiles = [];
 let pythonServer = 'http://127.0.0.1:5000/';
 let pname = '';
 let email = '';
-let role = 'via';
+let role = 'viasimple';
 let fileName = '';
 let questionToAsk = 3;
-let uniquename = getUniqueNameFromDate();
+let uniquename = '';
 let env = 'prod';
-let video_id
+let video_id ='';
 let videoArray = []
 let preparationTime = 0;
+let questions;
 
 window.onload = onLoad;
 
@@ -176,10 +177,17 @@ submitButton.addEventListener('click', () => {
 });
 
 function onLoad() {
+    $('.profile').show();
     $('.experiment').hide();
     $('.endCall').hide();
     //$('#avatarVideo').hide();
     $('#startButton').attr('disabled', true)
+
+    questionArr = [];
+    videoArray = [];
+    uniquename = getUniqueNameFromDate();
+    currentQuestionNumber = 0;
+    recordedFiles = [];
 
     getQuestions(role).then((response) => {
         if (response) {
@@ -270,11 +278,20 @@ function stopRecording(saveVideo = true) {
                                 recorder.destroy()
                                 recorder = null;
 
-                                $('.endCall').show();
-                                $('.experiment').hide();
-                                $('.profile').hide();
 
-                                //mergeVideo(email);
+                                let mergeVideoArr = [];
+                                for (let j = 0; j < questions.length; j++) {
+                                    let title = 'Question_' + questions[j].id;
+                                    mergeVideoArr.push(title + '.mp4')
+                                    mergeVideoArr.push(recordedFiles[j]);
+                                }
+
+                                let outputVideo = 'merge_video_' + pname.replace(' ', '_') + '.mp4';
+                                mergeVideo(mergeVideoArr, outputVideo).then((response) => {
+                                    $('.endCall').show();
+                                    $('.experiment').hide();
+                                    $('.profile').hide();
+                                });
 
                             }
                         });
@@ -289,17 +306,19 @@ function stopRecording(saveVideo = true) {
     });
 }
 
-function mergeVideo(merge_video_name) {
+function mergeVideo(mergeVideoArr, merge_video_name) {
     return new Promise((resolve, reject) => {
         $.ajax({
             url: pythonServer + 'api/combine-video',
             type: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify({ 'video_arr': videoArray, 'merge_video_name': merge_video_name }),  // Send the string array as JSON
+            data: JSON.stringify({ 'video_arr': mergeVideoArr, 'merge_video_name': merge_video_name }),  // Send the string array as JSON
             success: function (response) {
                 console.log('Response from server:', response);
+                resolve(response);
             },
             error: function (xhr, status, error) {
+                resolve(error);
                 console.log('Error:', error);
             }
         });
@@ -573,29 +592,4 @@ function getUniqueNameFromDate() {
     return uniqueName;
 }
 
-// function getRandomNumbers(low, high) {
-//     // Ensure low and high are integers
-//     low = Math.floor(low);
-//     high = Math.floor(high);
-
-//     if (low > high) {
-//         throw new Error("Low number must be less than or equal to high number.");
-//     }
-
-//     // Generate an array of numbers from low to high
-//     const numbers = [];
-//     for (let i = low; i <= high; i++) {
-//         //if (numbers.indexOf(i) > -1) {
-//         numbers.push(i);
-//         //}
-//     }
-
-//     // Shuffle the array using the Fisher-Yates algorithm
-//     for (let i = numbers.length - 1; i > 0; i--) {
-//         const j = Math.floor(Math.random() * (i + 1));
-//         [numbers[i], numbers[j]] = [numbers[j], numbers[i]]; // Swap elements
-//     }
-
-//     return numbers;
-// }
 

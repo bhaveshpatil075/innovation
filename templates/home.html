@@ -89,7 +89,7 @@
                     <h3>Question {{ loop.index }}: {{ result['question'] }}</h3>
                     <p><strong>Answer:</strong> {{ result['answer'] }}</p>
                     <video controls>
-                        <source src="{{ url_for('output_files', filename=result['videofile']) }}" type="video/mp4">
+                        <source src="{{ url_for('uploads', filename=result['videofile']) }}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                 </div>
@@ -117,22 +117,6 @@
                 <p>Surprise: {{ data['overall_emotion_percentages']['surprise'] }}%</p>
                 <p>Neutral: {{ data['overall_emotion_percentages']['neutral'] }}%</p>
             </div>
-
-            <!-- Display charts -->
-            <!-- <div>
-                <h3>Sentiment Analysis Chart</h3>
-                <img src="{{ url_for('output_files', filename='sentiment_analysis_chart.png') }}" alt="Sentiment Analysis Chart">
-            </div>
-
-            <div>
-                <h3>Emotion Analysis Chart</h3>
-                <img src="{{ url_for('output_files', filename='emotion_analysis_chart.png') }}" alt="Emotion Analysis Chart">
-            </div>
-
-            <div>
-                <h3>Word Cloud</h3>
-                <img src="{{ url_for('output_files', filename='wordcloud_answers.png') }}" alt="Word Cloud">
-            </div> -->
         </div>
 
         <div id="div3" class="toggle-div">

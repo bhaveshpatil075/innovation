@@ -9,28 +9,12 @@ from collections import Counter
 import re
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
+from flask import Flask, render_template, send_from_directory
+import json
+import os
 
-output_folder = 'output_files'
-if not os.path.exists(output_folder):
-    os.makedirs(output_folder)
+app = Flask(__name__)
 
-with open('interview_data.json', 'r') as file:
-    data = json.load(file)
-
-questions_and_answers = [
-    {
-        "question": response['question'],
-        "answer": response['answer'],
-        "videofile": response['videofile']
-    }
-    for response in data['response']
-]
-
-nltk.download('vader_lexicon')
-
-sia = SentimentIntensityAnalyzer()
-emotion_detector = FER()
-nlp = spacy.load('en_core_web_sm')
 
 def interpret_sentiment(positive_score, neutral_score, negative_score):
     if positive_score > neutral_score and positive_score > negative_score:
@@ -44,18 +28,48 @@ def clean_and_tokenize(text):
     words = text.split()
     return words
 
-overall_emotion_counts = Counter()
-overall_sentiment_counts = {"Positive": 0, "Neutral": 0, "Negative": 0}
-all_answers_text = ""
-total_questions = len(questions_and_answers)
 
-output_data = {"results": [], "overall_sentiment_percentages": {}, "overall_emotion_percentages": {}}
+output_folder = 'output_files'
+upload_folder = 'output_files'
 
-for index, qa in enumerate(questions_and_answers):
-    question = qa['question']
-    answer = qa['answer']
-    videofile = qa['videofile']
-    all_answers_text += answer + " "
+def analyseData(email):
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+    with open('response.json', 'r') as file:
+        data = json.load(file)
+        filtered_data = [item for item in data if item['email'] == email]
+
+
+    questions_and_answers = [
+        {
+            "question": response['question'],
+            "answer": response['answer'],
+            "videofile": response['videofile']
+        }
+        for response in filtered_data[0]['response']
+    ]
+
+    nltk.download('vader_lexicon')
+
+    sia = SentimentIntensityAnalyzer()
+    emotion_detector = FER()
+    nlp = spacy.load('en_core_web_sm')
+
+
+
+    overall_emotion_counts = Counter()
+    overall_sentiment_counts = {"Positive": 0, "Neutral": 0, "Negative": 0}
+    all_answers_text = ""
+    total_questions = len(questions_and_answers)
+
+    output_data = {"results": [], "overall_sentiment_percentages": {}, "overall_emotion_percentages": {}}
+
+    for index, qa in enumerate(questions_and_answers):
+        question = qa['question']
+        answer = qa['answer']
+        videofile = qa['videofile']
+        all_answers_text += answer + " "
 
     sentiment_scores = sia.polarity_scores(answer)
 
@@ -122,96 +136,64 @@ for index, qa in enumerate(questions_and_answers):
 
     output_data['results'][-1]['emotions'] = emotion_counts
 
-overall_sentiment_percentages = {
-    "Positive": round((overall_sentiment_counts["Positive"] / total_questions) * 100, 2),
-    "Neutral": round((overall_sentiment_counts["Neutral"] / total_questions) * 100, 2),
-    "Negative": round((overall_sentiment_counts["Negative"] / total_questions) * 100, 2)
-}
-output_data["overall_sentiment_percentages"] = overall_sentiment_percentages
+    overall_sentiment_percentages = {
+        "Positive": round((overall_sentiment_counts["Positive"] / total_questions) * 100, 2),
+        "Neutral": round((overall_sentiment_counts["Neutral"] / total_questions) * 100, 2),
+        "Negative": round((overall_sentiment_counts["Negative"] / total_questions) * 100, 2)
+    }
+    output_data["overall_sentiment_percentages"] = overall_sentiment_percentages
 
-total_emotions = sum(overall_emotion_counts.values())
-overall_emotion_percentages = {k: round((v / total_emotions) * 100, 2) if total_emotions > 0 else 0 for k, v in overall_emotion_counts.items()}
-output_data["overall_emotion_percentages"] = overall_emotion_percentages
+    total_emotions = sum(overall_emotion_counts.values())
+    overall_emotion_percentages = {k: round((v / total_emotions) * 100, 2) if total_emotions > 0 else 0 for k, v in overall_emotion_counts.items()}
+    output_data["overall_emotion_percentages"] = overall_emotion_percentages
 
-plt.figure(figsize=(10, 6))
-plt.plot([f"Q{i+1}" for i in range(len(questions_and_answers))], overall_sentiment_counts.values(), marker='o', color='blue')
-plt.title('Sentiment Analysis for Each Answer')
-plt.xlabel('Questions')
-plt.ylabel('Sentiment Count')
-plt.xticks(rotation=45)
-plt.tight_layout()
-plt.savefig(os.path.join(output_folder, 'sentiment_analysis_chart.png'))
+    plt.figure(figsize=(10, 6))
+    plt.plot([f"Q{i+1}" for i in range(len(questions_and_answers))], overall_sentiment_counts.values(), marker='o', color='blue')
+    plt.title('Sentiment Analysis for Each Answer')
+    plt.xlabel('Questions')
+    plt.ylabel('Sentiment Count')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_folder, 'sentiment_analysis_chart.png'))
 
-plt.figure(figsize=(10, 6))
-plt.bar(overall_emotion_counts.keys(), overall_emotion_counts.values(), color='orange')
-plt.title('Overall Emotion Counts from Video Analysis')
-plt.xlabel('Emotions')
-plt.ylabel('Frequency')
-plt.xticks(rotation=45)
-plt.tight_layout()
-plt.savefig(os.path.join(output_folder, 'emotion_analysis_chart.png'))
+    plt.figure(figsize=(10, 6))
+    plt.bar(overall_emotion_counts.keys(), overall_emotion_counts.values(), color='orange')
+    plt.title('Overall Emotion Counts from Video Analysis')
+    plt.xlabel('Emotions')
+    plt.ylabel('Frequency')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_folder, 'emotion_analysis_chart.png'))
 
-# Word Cloud Generation
-cleaned_answers = clean_and_tokenize(all_answers_text)
-wordcloud_text = ' '.join(cleaned_answers) 
+    # Word Cloud Generation
+    cleaned_answers = clean_and_tokenize(all_answers_text)
+    wordcloud_text = ' '.join(cleaned_answers) 
 
-wordcloud = WordCloud(width=800, height=400, background_color='white').generate(wordcloud_text)
+    wordcloud = WordCloud(width=800, height=400, background_color='white').generate(wordcloud_text)
 
-wordcloud.to_file(os.path.join(output_folder, 'wordcloud_answers.png'))
+    wordcloud.to_file(os.path.join(output_folder, 'wordcloud_answers.png'))
 
-print(f"Charts saved successfully in '{output_folder}'.")
+    print(f"Charts saved successfully in '{output_folder}'.")
 
-with open(os.path.join(output_folder, 'result.json'), 'w') as result_file:
-    json.dump(output_data, result_file, indent=4)
+    with open(os.path.join(output_folder, 'result.json'), 'w') as result_file:
+        json.dump(output_data, result_file, indent=4)
 
-print(f"Results saved successfully to '{output_folder}/result.json'.")
-
-
-
-# from flask import Flask, render_template
-
-# app = Flask(__name__)
-
-# @app.route('/')
-# def index():
-#     data = {
-#         'title': 'Welcome to the Sentiment Analysis Page',
-#         'description': 'This is where we analyze sentiment and emotions from video and text data.',
-#         'sentiment_score': 0.75,
-#         'positive_score': 0.5,
-#         'negative_score': 0.2,
-#         'neutral_score': 0.3
-#     }
-#     return render_template('home.html', data=data)
-
-# if __name__ == '__main__':
-#     app.run(debug=True)
-
-
-from flask import Flask, render_template, send_from_directory
-import json
-import os
-
-app = Flask(__name__)
-
-OUTPUT_FOLDER = 'output_files'
+    print(f"Results saved successfully to '{output_folder}/result.json'.")
 
 
 def load_data():
-    result_path = os.path.join(OUTPUT_FOLDER, 'result.json')
+    result_path = os.path.join(output_folder, 'result.json')
     with open(result_path, 'r') as file:
         data = json.load(file)
     return data
 
-@app.route('/')
-def index():
-
+# @app.route('/')
+def renderData(email):
+    analyseData(email)
     data = load_data()
-
-    sentiment_chart = os.path.join(OUTPUT_FOLDER, 'sentiment_analysis_chart.png')
-    emotion_chart = os.path.join(OUTPUT_FOLDER, 'emotion_analysis_chart.png')
-    wordcloud_chart = os.path.join(OUTPUT_FOLDER, 'wordcloud_answers.png')
-
+    sentiment_chart = os.path.join(output_folder, 'sentiment_analysis_chart.png')
+    emotion_chart = os.path.join(output_folder, 'emotion_analysis_chart.png')
+    wordcloud_chart = os.path.join(output_folder, 'wordcloud_answers.png')
     return render_template('home.html', data=data,
                            sentiment_chart=sentiment_chart,
                            emotion_chart=emotion_chart,
@@ -219,7 +201,14 @@ def index():
 
 @app.route('/output_files/<path:filename>')
 def output_files(filename):
-    return send_from_directory(OUTPUT_FOLDER, filename)
+    return send_from_directory(output_folder, filename)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route('/uploads/<filename>')
+def uploads(filename):
+    # Your logic here
+    return f"File: {filename}"
+
+# if __name__ == '__main__':
+#     app.run(debug=True)
+
+

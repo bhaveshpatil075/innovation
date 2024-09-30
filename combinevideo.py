@@ -13,6 +13,7 @@ def combine_videos(arr, output):
         '-safe', '0',
         '-i', 'inputs.txt',
         '-c', 'copy',
+        '-y',
         'uploads/' + output
     ]
 
