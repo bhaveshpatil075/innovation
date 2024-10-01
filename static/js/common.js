@@ -48,7 +48,7 @@ $('#registrationForm').on('submit', function (event) {
     }
 
     if (isValid) {
-        $('.profile').hide();
+        $('#profile').hide();
         $('.experiment').show();
         $('.endcall').hide();
         $("#start").attr("disabled", true);
@@ -133,7 +133,7 @@ function syncVideo(video_id, showSubmitButton = false) {
 //     recorder.stopRecording(() => {
 //         $('.endCall').show();
 //         $('.experiment').hide();
-//         $('.profile').hide();
+//         $('#profile').hide();
 
 //         videoElement.srcObject.getTracks().forEach(track => track.stop());
 //         mediaStream.getTracks().forEach(track => track.stop());
@@ -165,7 +165,7 @@ submitButton.addEventListener('click', () => {
 });
 
 function onLoad() {
-    $('.profile').show();
+    $('#profile').show();
     $('.experiment').hide();
     $('.endCall').hide();
     //$('#avatarVideo').hide();
@@ -277,11 +277,11 @@ function stopRecording(saveVideo = true) {
                                 videoElement.srcObject.getTracks().forEach(track => track.stop());
                                 mediaStream.getTracks().forEach(track => track.stop());
 
-                                let outputVideo = 'merge_video_' + pname.replace(' ', '_') + '.mp4';
+                                let outputVideo = 'merge_video.mp4';
                                 mergeVideo(mergeVideoArr, outputVideo).then((response) => {
                                     // $('.endCall').show();
                                     // $('.experiment').hide();
-                                    // $('.profile').hide();
+                                    // $('#profile').hide();
                                     let redirectUrl = pythonServer + '/home/' + email;
                                     window.location.href = redirectUrl;
 

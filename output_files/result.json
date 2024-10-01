@@ -1,0 +1,89 @@
+{
+    "results": [
+        {
+            "question": "Hey Bhavesh how are you what's going on in your world.",
+            "answer": "1 2 3 I am good how about you I am doing great",
+            "sentiment_score": 0.7906,
+            "sentiment": "Positive",
+            "sentiment_percentages": {
+                "Positive": 53.8,
+                "Neutral": 46.2,
+                "Negative": 0.0
+            },
+            "entities": [
+                [
+                    "1 2",
+                    "CARDINAL"
+                ]
+            ],
+            "emotions": {
+                "angry": 0,
+                "disgust": 0,
+                "fear": 0,
+                "happy": 0,
+                "sad": 0,
+                "surprise": 0,
+                "neutral": 7
+            },
+            "videofile": "20241001_193345_453.mp4"
+        },
+        {
+            "question": "How was the totally new role, how do you enjoy it.",
+            "answer": "good I am enjoying it working hard for myself",
+            "sentiment_score": 0.7096,
+            "sentiment": "Positive",
+            "sentiment_percentages": {
+                "Positive": 49.6,
+                "Neutral": 39.4,
+                "Negative": 11.0
+            },
+            "entities": [],
+            "emotions": {
+                "angry": 0,
+                "disgust": 0,
+                "fear": 0,
+                "happy": 0,
+                "sad": 0,
+                "surprise": 0,
+                "neutral": 2
+            },
+            "videofile": "20241001_193414_950.mp4"
+        },
+        {
+            "question": "i'm totally disappointed why i'm not included in the meeting with sam yesterday, looking at your insights",
+            "answer": "this is a video for demo purpose",
+            "sentiment_score": 0.0,
+            "sentiment": "Neutral",
+            "sentiment_percentages": {
+                "Positive": 0.0,
+                "Neutral": 100.0,
+                "Negative": 0.0
+            },
+            "entities": [],
+            "emotions": {
+                "angry": 0,
+                "disgust": 0,
+                "fear": 0,
+                "happy": 0,
+                "sad": 0,
+                "surprise": 0,
+                "neutral": 7
+            },
+            "videofile": "20241001_193438_577.mp4"
+        }
+    ],
+    "overall_sentiment_percentages": {
+        "Positive": 66.67,
+        "Neutral": 33.33,
+        "Negative": 0.0
+    },
+    "overall_emotion_percentages": {
+        "angry": 0.0,
+        "disgust": 0.0,
+        "fear": 0.0,
+        "happy": 0.0,
+        "sad": 0.0,
+        "surprise": 0.0,
+        "neutral": 100.0
+    }
+}

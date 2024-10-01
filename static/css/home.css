@@ -1,0 +1,158 @@
+html {
+  background-image: url("../images/VAAI_Scorecard.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+body {
+  font-family: Arial, sans-serif;
+  /*background-image: url("../images/VAAI_Scorecard.jpg");
+    background-size: cover;
+    background-repeat: no-repeat; */
+  height: auto;
+  width: auto;
+  overflow: auto; /* Enable scrolling if content overflows */
+  position: relative;
+}
+
+video {
+  border: 4px solid rgb(36, 34, 97);
+  border-radius: 0;
+  height: 25rem;
+  width: 80%;
+}
+.navbar {
+  background-color: rgb(182, 64, 147);
+  color: white;
+  padding: 12px;
+  text-align: center;
+}
+
+.button-bar {
+  /*display: flex;*/
+  top: -6rem;
+  justify-content: flex-start;
+  background-color: transparent;
+  border-radius: 3px;
+  padding: 10px;
+  /*position: absolute;*/
+  transform: translate(0%, 139%);
+}
+
+.buttonTab.active-button {
+  background-color: rgb(83, 145, 226);
+  /*border-radius: 3px;*/
+  /*border: 2px solid rgb(186, 4, 77);*/
+}
+.buttonTab.video,
+.buttonTab.scoring,
+.buttonTab.textspeech {
+  position: relative;
+  padding-left: 4.4rem;
+}
+.buttonTab.video:before {
+  content: "";
+  background-image: url("../images/video icon.png");
+  display: inline-block;
+  height: 40px;
+  position: absolute;
+  top: 19%;
+  width: 40px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  left: 10%;
+}
+.buttonTab.scoring:before {
+  content: "";
+  background-image: url("../images/scoring icon.png");
+  display: inline-block;
+  height: 40px;
+  position: absolute;
+  top: 19%;
+  width: 40px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  left: 8%;
+}
+.buttonTab.textspeech:before {
+  content: "";
+  background-image: url("../images/speech icon.png");
+  display: inline-block;
+  height: 40px;
+  position: absolute;
+  top: 19%;
+  width: 40px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  left: 4.5%;
+}
+.button-bar button {
+  margin: 22px 10px;
+  padding: 24px 20px;
+  background-color: rgb(84, 72, 255);
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  border: 0;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+.button-bar button:hover {
+  background-color: rgb(83, 145, 226);
+  border-radius: 3px;
+}
+
+.main-content {
+  /*background-color: #efefef;*/
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  justify-content: flex-end;
+  transform: translate(-14%, 27%);
+  width: 100%;
+}
+
+.toggle-div.active {
+  display: block;
+}
+
+.toggle-div {
+  display: none; /* Hide all by default */
+  background-color: transparent;
+}
+
+.toggle-div.active {
+  display: block; /* Show only the active div */
+}
+
+.active-button {
+  font-weight: bold; /* Style for active button */
+  border-radius: 3px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  margin-top: 20px;
+}
+.qna{
+color: rgb(81, 107, 52);
+font-weight: 700;
+}
+.download-btn {
+    background-color: red; /* Green */
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+  }
+  /* .downloadBtn{
+    float: inline-end;
+    margin-top: 6rem;
+  } */

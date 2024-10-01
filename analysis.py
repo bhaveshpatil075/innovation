@@ -68,7 +68,7 @@ def analyseData(email):
     for index, qa in enumerate(questions_and_answers):
         question = qa['question']
         answer = qa['answer']
-        videofile = 'uploads/' + qa['videofile']
+        videofile = qa['videofile']
         all_answers_text += answer + " "
 
         sentiment_scores = sia.polarity_scores(answer)
@@ -100,8 +100,8 @@ def analyseData(email):
         })
 
         # Video emotion analysis
-        print(f"Analyzing emotions from video: {videofile}")
-        cap = cv2.VideoCapture(videofile)
+        print(f"Analyzing emotions from video: {'uploads/' +videofile}")
+        cap = cv2.VideoCapture('uploads/' +videofile)
         frame_count = 0
 
         emotion_counts = {

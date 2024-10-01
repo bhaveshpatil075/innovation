@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VIA Avatar</title>
-    <link rel="stylesheet" href="https://www.webrtc-experiment.com/style.css">
+    <!-- <link rel="stylesheet" href="https://www.webrtc-experiment.com/style.css"> -->
     <link rel="stylesheet" type="text/css" href="../static/css/index.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body>
-    <div class="profile container">
+    <div id="profile" class="profile container">
         <main>
             <div class="form-container">
                 <span style="font-size: 24px; letter-spacing: 2px; font-weight: bold;">PARTICIPANT</span>
@@ -35,14 +35,7 @@
 
     <div class="exp">
         <section class="experiment" style="text-align: center;">
-            <div>
-                <button id="start">Start Interview</button>
-                <button id="stop">End Interview</button>
-                <button id="submit">I've finished answering!</button>
-                <!-- <button id="nextQuestion">Next Question</button> -->
-            </div>
-
-            <div id="video-preview" style="margin-top: 15px;">
+            <div id="video-preview" style="margin-bottom: 15px;">
                 <h2 style="display: block;"></h2>
                 <!-- <img id="avatar" src="{{ url_for('static', filename='../images/anna_costume1_cameraA.png') }}"
                     style="max-width: 100%;max-height:255px"> -->
@@ -52,6 +45,12 @@
                     Your browser does not support the video tag.
                 </video>
                 <video class="participantVideo interview" id="video" autoplay muted></video>
+            </div>
+            <div>
+                <button class="indexSubmit" id="start">Start Role Play</button>
+                <!-- <button class="indexSubmit" id="stop">End Interview</button> -->
+                <button class="indexSubmit" id="submit">I've finished answering!</button>
+                <!-- <button class="indexSubmit" id="nextQuestion">Next Question</button> -->
             </div>
 
         </section>
