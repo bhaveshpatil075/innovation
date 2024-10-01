@@ -1,5 +1,5 @@
 html {
-  background-image: url("../images/VAAI_Scorecard.jpg");
+  background-image: url("../images/VAAI_Scorecard_base-old.png");
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -102,17 +102,26 @@ video {
   background-color: rgb(83, 145, 226);
   border-radius: 3px;
 }
-
 .main-content {
-  /*background-color: #efefef;*/
   padding: 20px;
   text-align: center;
   display: flex;
   justify-content: flex-end;
-  transform: translate(-14%, 27%);
-  width: 100%;
+  /*transform: translate(-14%, 24%);*/
+  /*width: 100%;*/
 }
-
+.main-content #div1 {
+  /* background-color: #0000ff; */
+  transform: translate(-13%, 12%);
+}
+.main-content #div2 {
+  /* background-color: #ff0000; */
+  transform: translate(-116%, 18%);
+}
+.main-content #div3 {
+  /* background-color: #00ff00; */
+  transform: translate(-11%, 8%);
+}
 .toggle-div.active {
   display: block;
 }
@@ -136,23 +145,77 @@ img {
   height: auto;
   margin-top: 20px;
 }
-.qna{
-color: rgb(81, 107, 52);
-font-weight: 700;
+.qna {
+  color: rgb(81, 107, 52);
+  font-weight: 700;
+  font-size: 25px;
 }
 .download-btn {
-    background-color: red; /* Green */
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
+  background-color: transparent; /* Green */
+  color: white;
+  padding: 14px 22px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+.downloadBtn {
+  position: absolute;
+  right: 14px;
+  top: 14rem;
+}
+table {
+    width: 160%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+    background-color: white;
+}
+
+thead {
+    background-color: #5C4DB1; /* Header background color (purple) */
+    color: white; /* Header text color */
+}
+
+thead th {
+    padding: 10px;
+    text-align: left;
     font-size: 16px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-  }
-  /* .downloadBtn{
-    float: inline-end;
-    margin-top: 6rem;
-  } */
+}
+
+tbody td {
+    padding: 12px;
+    border: 1px solid rgb(36, 34, 97); /* Table border */
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2; /* Alternating row background color */
+}
+
+tbody tr:hover {
+    background-color: #e9e9e9; /* Row hover effect */
+}
+
+tbody td:nth-child(2) {
+    width: 20%; /* Adjust the width for the second column */
+    text-align: center; /* Center alignment for score */
+    font-weight: bold; /* Make scores bold */
+}
+
+tbody td:last-child {
+    width: 60%; /* Adjust the width for the comment column */
+}
+
+.sentimentHeading{
+    width: 160%;
+    text-align: center;
+}
+.subHeading{
+    width: 160%;
+    text-align: center;
+}
