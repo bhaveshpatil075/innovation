@@ -44,11 +44,6 @@ def get_next_question():
         return data[role], 200
     return 'No data found for the role', 404
 
-# @app.route('/api/text-to-speech', methods=['GET'])
-# def ai_avatar_interview():
-#     print("AI Avatar: Hello, welcome to your interview. How can I assist you today?")
-#     text_to_speech("Hello, welcome to your interview. How can I assist you today?")
-
 @app.route('/api/text-to-speech', methods=['POST'])
 def ai_avatar_interview():
     new_item = request.json    

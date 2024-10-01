@@ -67,7 +67,7 @@ def recognize_speech_from_audio(file_path):
         print("Unable to recognize any speech.")
 
 def download_video(url, folder_path, file_name):    
-    file_name = file_name.replace('-','') + '.mp4'
+    file_name = file_name.replace('-','intro') + '.mp4'
     file_path = os.path.join(folder_path, file_name)    
     if os.path.exists(file_path):
         return

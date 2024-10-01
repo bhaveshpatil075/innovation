@@ -5,7 +5,6 @@ let startButton = document.getElementById('start');
 let stopButton = $('#stop');
 let questionArr = [];
 let currentQuestionNumber = 0;
-let nextQuestionButton = document.getElementById('nextQuestion');
 let submitButton = document.getElementById('submit');
 let questionId = 0;
 let recordedFiles = [];
@@ -17,7 +16,7 @@ let fileName = '';
 let questionToAsk = 3;
 let uniquename = '';
 let env = 'prod';
-let video_id ='';
+let video_id = '';
 let videoArray = []
 let preparationTime = 0;
 let questions;
@@ -47,7 +46,6 @@ $('#registrationForm').on('submit', function (event) {
         $('#emailError').text('Invalid email address.').show();
         isValid = false;
     }
-
 
     if (isValid) {
         $('.profile').hide();
@@ -115,10 +113,6 @@ function syncVideo(video_id, showSubmitButton = false) {
                         startRecording();
                     }, delayTime);
                 } else {
-                    // if (env == 'prod') {
-                    //     $('#avatar').hide();
-                    //     $('#avatarVideo').show();
-                    // }
                     setTimeout(function () {
                         $("#start").removeAttr("disabled");
                     }, delayTime);
@@ -134,18 +128,17 @@ function syncVideo(video_id, showSubmitButton = false) {
     })
 }
 
-// Function to stop recording and save video
-stopButton.click(() => {
-    recorder.stopRecording(() => {
-        $('.endCall').show();
-        $('.experiment').hide();
-        $('.profile').hide();
+// // Function to stop recording and save video
+// stopButton.click(() => {
+//     recorder.stopRecording(() => {
+//         $('.endCall').show();
+//         $('.experiment').hide();
+//         $('.profile').hide();
 
-        videoElement.srcObject.getTracks().forEach(track => track.stop());
-        mediaStream.getTracks().forEach(track => track.stop());
-
-    });
-});
+//         videoElement.srcObject.getTracks().forEach(track => track.stop());
+//         mediaStream.getTracks().forEach(track => track.stop());
+//     });
+// });
 
 function convertToMilliseconds(hours, minutes, seconds) {
     const hoursToMilliseconds = hours * 3600 * 1000;
@@ -161,17 +154,12 @@ start.addEventListener('click', async () => {
     startInterview();
 });
 
-nextQuestionButton.addEventListener('click', () => {
-    $('#nextQuestion').attr('disabled', true);
-    nextQuestion();
-});
 
 submitButton.addEventListener('click', () => {
     $('#submit').attr('disabled', true);
     currentQuestionNumber++;
     stopRecording(true).then((resolve) => {
-        $('#nextQuestion').show();
-        $('#nextQuestion').removeAttr('disabled');
+        nextQuestion();
     });
 
 });
@@ -286,11 +274,17 @@ function stopRecording(saveVideo = true) {
                                     mergeVideoArr.push(recordedFiles[j]);
                                 }
 
+                                videoElement.srcObject.getTracks().forEach(track => track.stop());
+                                mediaStream.getTracks().forEach(track => track.stop());
+
                                 let outputVideo = 'merge_video_' + pname.replace(' ', '_') + '.mp4';
                                 mergeVideo(mergeVideoArr, outputVideo).then((response) => {
-                                    $('.endCall').show();
-                                    $('.experiment').hide();
-                                    $('.profile').hide();
+                                    // $('.endCall').show();
+                                    // $('.experiment').hide();
+                                    // $('.profile').hide();
+                                    let redirectUrl = pythonServer + '/home/' + email;
+                                    window.location.href = redirectUrl;
+
                                 });
 
                             }
@@ -373,11 +367,11 @@ function nextQuestion() {
                 startRecording();
             });
         }
-
-    } else {
-        $('.endCall').show();
-        $('.experiment').hide();
     }
+    // else {
+    //     $('.endCall').show();
+    //     $('.experiment').hide();
+    // }
 }
 
 function convertBlobToText(fileName) {
