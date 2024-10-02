@@ -1,136 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analysis Dashboard</title>    
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        .navbar {
-            background-color: #333;
-            color: white;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .button-bar {
-            display: flex;
-            justify-content: center;
-            background-color: #f4f4f4;
-            padding: 10px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .button-bar button {
-            margin: 0 10px;
-            padding: 10px 20px;
-            background-color: #333;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .button-bar button:hover {
-            background-color: #555;
-        }
-
-        .main-content {
-            padding: 20px;
-            text-align: center;
-        }
-
-        .toggle-div {
-            display: none;
-            padding: 20px;
-            margin: 20px auto;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            width: 80%;
-        }
-
-        .toggle-div.active {
-            display: block;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            margin-top: 20px;
-        }
-    </style>
+    <title>Analysis Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/home.css">
 </head>
+
 <body>
 
-    <!-- Navbar -->
-    <div class="navbar">
-        <h1>Analysis Dashboard</h1>
-    </div>
-
-    <!-- Button bar with horizontal buttons -->
     <div class="button-bar">
-        <button onclick="toggleDiv('div1')">Show Div 1</button>
-        <button onclick="toggleDiv('div2')">Show Analysis</button>
-        <button onclick="toggleDiv('div3')">Show Div 3</button>
+        <button onclick="toggleDiv('div1')" class="buttonTab video active-button">Video</button>
+        <button onclick="toggleDiv('div2')" class="buttonTab scoring">Scoring</button>
+        <button onclick="toggleDiv('div3')" class="buttonTab textspeech">Speech Analysis Report</button>
     </div>
 
-    <!-- Main content area -->
+    <span class="downloadBtn">
+        <a href="http://localhost/innovation/VAAI_Scorecard_speech.pdf" class="download-btn" target="_blank" download="yourfile.pdf">          </a>
+    </span>
     <div class="main-content">
-        <div id="div1" class="toggle-div">
-
-            
-                
-            <h2>Questions and Answers</h2>
+        <div id="div1" class="toggle-div active">
+            <h2 class="qna">Questions and Answers</h2>
             <div class="qa-section">
                 {% for result in data['results'] %}
                 <div class="qa-item">
-                    <h3>Question {{ loop.index }}: {{ result['question'] }}</h3>
-                    <p><strong>Answer:</strong> {{ result['answer'] }}</p>
+                    <h3><span class="que">Question {{ loop.index }}</span>: {{ result['question'] }}</h3>
+                    <p><strong><span class="ans">Answer:</span></strong> {{ result['answer'] }}</p>
                     <video controls>
-                        <source src="http://localhost/innovation/{{ url_for('uploads', filename=result['videofile']) }}" type="video/mp4">
+                        <source src="http://localhost/innovation{{ url_for('uploads', filename=result['videofile']) }}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                 </div>
-                <hr>
                 {% endfor %}
             </div>
         </div>
 
         <div id="div2" class="toggle-div">
-            <h2>Overall Sentiment and Emotion Percentages</h2>
+            <h2 class="sentimentHeading qna">Overall Sentiment and Emotion Percentages</h2>
             <div>
-                <h3>Sentiment Percentages</h3>
-                <p>Positive: {{ data['overall_sentiment_percentages']['Positive'] }}%</p>
-                <p>Neutral: {{ data['overall_sentiment_percentages']['Neutral'] }}%</p>
-                <p>Negative: {{ data['overall_sentiment_percentages']['Negative'] }}%</p>
+                <h3 class="subHeading">Sentiment Percentages</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sentiment</th>
+                            <th>Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Positive</td>
+                            <td>{{ data['overall_sentiment_percentages']['Positive'] }}%</td>
+                        </tr>
+                        <tr>
+                            <td>Neutral</td>
+                            <td>{{ data['overall_sentiment_percentages']['Neutral'] }}%</td>
+                        </tr>
+                        <tr>
+                            <td>Negative</td>
+                            <td>{{ data['overall_sentiment_percentages']['Negative'] }}%</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
+
             <div>
-                <h3>Emotion Percentages</h3>
-                <p>Angry: {{ data['overall_emotion_percentages']['angry'] }}%</p>
-                <p>Disgust: {{ data['overall_emotion_percentages']['disgust'] }}%</p>
-                <p>Fear: {{ data['overall_emotion_percentages']['fear'] }}%</p>
-                <p>Happy: {{ data['overall_emotion_percentages']['happy'] }}%</p>
-                <p>Sad: {{ data['overall_emotion_percentages']['sad'] }}%</p>
-                <p>Surprise: {{ data['overall_emotion_percentages']['surprise'] }}%</p>
-                <p>Neutral: {{ data['overall_emotion_percentages']['neutral'] }}%</p>
+                <h3 class="subHeading">Emotion Percentages</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Emotion</th>
+                            <th>Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Angry</td>
+                            <td>{{ data['overall_emotion_percentages']['angry'] }}%</td>
+                        </tr>
+                        <tr>
+                            <td>Disgust</td>
+                            <td>{{ data['overall_emotion_percentages']['disgust'] }}%</td>
+                        </tr>
+                        <tr>
+                            <td>Fear</td>
+                            <td>{{ data['overall_emotion_percentages']['fear'] }}%</td>
+                        </tr>
+                        <tr>
+                            <td>Happy</td>
+                            <td>{{ data['overall_emotion_percentages']['happy'] }}%</td>
+                        </tr>
+                        <tr>
+                            <td>Sad</td>
+                            <td>{{ data['overall_emotion_percentages']['sad'] }}%</td>
+                        </tr>
+                        <tr>
+                            <td>Surprise</td>
+                            <td>{{ data['overall_emotion_percentages']['surprise'] }}%</td>
+                        </tr>
+                        <tr>
+                            <td>Neutral</td>
+                            <td>{{ data['overall_emotion_percentages']['neutral'] }}%</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+
         </div>
 
         <div id="div3" class="toggle-div">
             <div>
                 <h3>Sentiment Analysis Chart</h3>
-                <img src="{{ url_for('output_files', filename='sentiment_analysis_chart.png') }}" alt="Sentiment Analysis Chart">
+                <img src="{{ url_for('output_files', filename='sentiment_analysis_chart.png') }}"
+                    alt="Sentiment Analysis Chart">
             </div>
 
             <div>
                 <h3>Emotion Analysis Chart</h3>
-                <img src="{{ url_for('output_files', filename='emotion_analysis_chart.png') }}" alt="Emotion Analysis Chart">
+                <img src="{{ url_for('output_files', filename='emotion_analysis_chart.png') }}"
+                    alt="Emotion Analysis Chart">
             </div>
 
             <div>
@@ -143,13 +132,28 @@
     <script>
         function toggleDiv(divId) {
             var divs = document.querySelectorAll('.toggle-div');
-            divs.forEach(function(div) {
+            var buttons = document.querySelectorAll('.button-bar button');
+
+            // Hide all divs and remove active class from all buttons
+            divs.forEach(function (div) {
                 div.classList.remove('active');
             });
+            buttons.forEach(function (button) {
+                button.classList.remove('active-button');
+            });
+
+            // Show the selected div and add active class to the corresponding button
             var selectedDiv = document.getElementById(divId);
             selectedDiv.classList.add('active');
+
+            // Add active class to the corresponding button
+            var activeButton = Array.from(buttons).find(button => button.onclick.toString().includes(divId));
+            if (activeButton) {
+                activeButton.classList.add('active-button');
+            }
         }
     </script>
 
 </body>
+
 </html>

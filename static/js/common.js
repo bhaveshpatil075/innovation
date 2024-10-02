@@ -128,17 +128,6 @@ function syncVideo(video_id, showSubmitButton = false) {
     })
 }
 
-// // Function to stop recording and save video
-// stopButton.click(() => {
-//     recorder.stopRecording(() => {
-//         $('.endCall').show();
-//         $('.experiment').hide();
-//         $('#profile').hide();
-
-//         videoElement.srcObject.getTracks().forEach(track => track.stop());
-//         mediaStream.getTracks().forEach(track => track.stop());
-//     });
-// });
 
 function convertToMilliseconds(hours, minutes, seconds) {
     const hoursToMilliseconds = hours * 3600 * 1000;
@@ -266,26 +255,25 @@ function stopRecording(saveVideo = true) {
                                 recorder.destroy()
                                 recorder = null;
 
-
-                                let mergeVideoArr = [];
-                                for (let j = 0; j < questions.length; j++) {
-                                    let title = 'Question_' + questions[j].id;
-                                    mergeVideoArr.push(title + '.mp4')
-                                    mergeVideoArr.push(recordedFiles[j]);
-                                }
+                                // let mergeVideoArr = [];
+                                // for (let j = 0; j < questions.length; j++) {
+                                //     let title = 'Question_' + questions[j].id;
+                                //     mergeVideoArr.push(title + '.mp4')
+                                //     mergeVideoArr.push(recordedFiles[j]);
+                                // }
 
                                 videoElement.srcObject.getTracks().forEach(track => track.stop());
                                 mediaStream.getTracks().forEach(track => track.stop());
 
-                                let outputVideo = 'merge_video.mp4';
-                                mergeVideo(mergeVideoArr, outputVideo).then((response) => {
-                                    // $('.endCall').show();
-                                    // $('.experiment').hide();
-                                    // $('#profile').hide();
-                                    let redirectUrl = pythonServer + '/home/' + email;
-                                    window.location.href = redirectUrl;
+                                // let outputVideo = 'merge_video.mp4';
+                                // mergeVideo(mergeVideoArr, outputVideo).then((response) => {
+                                // $('.endCall').show();
+                                // $('.experiment').hide();
+                                // $('#profile').hide();
+                                let redirectUrl = pythonServer + '/home/' + email;
+                                window.location.href = redirectUrl;
 
-                                });
+                                // });
 
                             }
                         });
