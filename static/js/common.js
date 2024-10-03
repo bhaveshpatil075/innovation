@@ -25,11 +25,8 @@ window.onload = onLoad;
 
 $('#registrationForm').on('submit', function (event) {
 
-    event.preventDefault();
-
-    // Clear previous error messages
+    event.preventDefault();    
     $('.error-message').hide();
-
     let isValid = true;
 
     // Name validation
@@ -50,7 +47,7 @@ $('#registrationForm').on('submit', function (event) {
     if (isValid) {
         $('#participantName').text(name);
         $('#profile').hide();
-        $('#exp').show();        
+        $('#exp').show();
         $("#start").attr("disabled", true);
 
         pname = $('#name').val();
@@ -62,13 +59,16 @@ $('#registrationForm').on('submit', function (event) {
         startRecording().then(() => {
             if (env == 'prod') {
                 setTimeout(function () {
-                    let videoid = 'e5954ac2-11b3-4780-a7e6-fa834e0aaef7'
-                    //77c3961b-84db-4ec5-91cc-a679bb6af7fe
+                    let videoid = '6455c048-5150-4927-9cdc-38a60a7cd9f8'
+                    //77c3961b-84db-4ec5-91cc-a679bb6af7fe e5954ac2-11b3-4780-a7e6-fa834e0aaef7
                     syncVideo(videoid);
                 }, preparationTime);
-            } else {                
-                playEyeBlinks(true);
-                $("#start").removeAttr("disabled");            
+            } else {
+                $('#avatarVideo').attr('src', 'http://localhost/innovation/videos/intro_1.mp4');
+                setTimeout(function () {
+                    playEyeBlinks(true);
+                    $("#start").removeAttr("disabled");
+                }, 6000);
             }
 
         });
@@ -153,12 +153,10 @@ function syncVideo(video_id, showSubmitButton = false) {
     })
 }
 
-
 function convertToMilliseconds(hours, minutes, seconds) {
     const hoursToMilliseconds = hours * 3600 * 1000;
     const minutesToMilliseconds = minutes * 60 * 1000;
     const secondsToMilliseconds = seconds * 1000;
-
     return hoursToMilliseconds + minutesToMilliseconds + secondsToMilliseconds;
 }
 
@@ -168,7 +166,6 @@ start.addEventListener('click', async () => {
     startInterview();
 });
 
-
 submitButton.addEventListener('click', () => {
     $('#submit').attr('disabled', true);
     playEyeBlinks(false);
@@ -176,13 +173,12 @@ submitButton.addEventListener('click', () => {
     stopRecording(true).then((resolve) => {
         nextQuestion();
     });
-
 });
 
 function onLoad() {
     $('#eyeblink').hide();
     $('#profile').show();
-    $('#exp').hide();    
+    $('#exp').hide();
     //$('#avatarVideo').hide();
     $('#startButton').attr('disabled', true)
 
@@ -215,13 +211,11 @@ function onLoad() {
                     }
                 }
             }
-
         }
     });
-
 }
 
-function startInterview() {    
+function startInterview() {
     $('#exp').show();
     $('#submit').hide();
 
@@ -273,8 +267,8 @@ function stopRecording(saveVideo = true) {
                         if (answer == '') {
                             answer = 'No answer given';
                         }
-                        //saveTextToFile(email, questionId, questionName, answer, uniquename + '.mp4').then(() => {
-                        saveTextToFile(email, questionId, questionName, answer, uniquename + '.webm').then(() => {
+                        saveTextToFile(email, questionId, questionName, answer, uniquename + '.mp4').then(() => {
+                        //saveTextToFile(email, questionId, questionName, answer, uniquename + '.webm').then(() => {
                             console.log(new Date().toLocaleTimeString());
                             console.log('Response saved');
 
@@ -295,12 +289,9 @@ function stopRecording(saveVideo = true) {
                                 mediaStream.getTracks().forEach(track => track.stop());
 
                                 // let outputVideo = 'merge_video.mp4';
-                                // mergeVideo(mergeVideoArr, outputVideo).then((response) => {                                
-                                // $('#exp').hide();
-                                // $('#profile').hide();
-                                let redirectUrl = pythonServer + '/home/' + email;
+                                // mergeVideo(mergeVideoArr, outputVideo).then((response) => {                                                          
+                                let redirectUrl = pythonServer + 'home/' + email;
                                 window.location.href = redirectUrl;
-
                                 // });
 
                             }
@@ -308,7 +299,7 @@ function stopRecording(saveVideo = true) {
                         resolve('Resolved!');
                     });
                 });
-            }            
+            }
             resolve('Resolved!');
         });
     });
@@ -377,7 +368,7 @@ function nextQuestion() {
                 }, preparationTime);
             }
         } else {
-            syncLocalVideo(true);           
+            syncLocalVideo(true);
             startRecording();
         }
     }
@@ -385,8 +376,8 @@ function nextQuestion() {
 
 function convertBlobToText(fileName) {
     return new Promise((resolve, reject) => {
-        // let audio = fileName.indexOf('.mp4') > -1 ? fileName.replace('.mp4', '.wav') : fileName;
-        let audio = fileName.indexOf('.webm') > -1 ? fileName.replace('.webm', '.wav') : fileName;
+        let audio = fileName.indexOf('.mp4') > -1 ? fileName.replace('.mp4', '.wav') : fileName;
+        // let audio = fileName.indexOf('.webm') > -1 ? fileName.replace('.webm', '.wav') : fileName;
         let videoFileName = 'uploads/' + fileName;
         let audioFileName = 'uploads/' + audio;
 
@@ -526,9 +517,9 @@ function uploadFile(recordedBlob) {
         const formData = new FormData();
         // generating a random file name
         fileName = uniquename + '.webm';
-        // recordedFiles.push(uniquename + '.mp4');
-        recordedFiles.push(fileName);
-        
+        recordedFiles.push(uniquename + '.mp4');
+        //recordedFiles.push(fileName);
+
         formData.append('file', recordedBlob, fileName);
 
         $.ajax({

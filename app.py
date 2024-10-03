@@ -109,12 +109,12 @@ def upload_file():
     if file:
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        #newfilepath = os.path.join(app.config['UPLOAD_FOLDER'], filename.replace('webm','mp4'))        
+        newfilepath = os.path.join(app.config['UPLOAD_FOLDER'], filename.replace('webm','mp4'))        
         if os.path.exists(filepath):
             os.remove(filepath)
         file.save(filepath)
 
-        #convert_webm_to_mp4(filepath, newfilepath)
+        convert_webm_to_mp4(filepath, newfilepath)
         
         return jsonify({'message': 'File uploaded successfully'}), 200
     else:

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="../static/images/favicon.ico" />
     <title>Analysis Dashboard</title>
     <link rel="stylesheet" type="text/css" href="../static/css/home.css">
 </head>
@@ -25,12 +26,13 @@
             <div class="qa-section">
                 {% for result in data['results'] %}
                 <div class="qa-item">
-                    <h3><span class="que">Question {{ loop.index }}</span>: {{ result['question'] }}</h3>
+                    <span class="que"><b>Question {{ loop.index }}:</b> {{ result['question'] }}</span>
                     <p><strong><span class="ans">Answer:</span></strong> {{ result['answer'] }}</p>
                     <video controls>
                         <source src="http://localhost/innovation{{ url_for('uploads', filename=result['videofile']) }}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
+                    <br><br><br>
                 </div>
                 {% endfor %}
             </div>
@@ -110,19 +112,19 @@
         </div>
 
         <div id="div3" class="toggle-div">
-            <div>
+            <div><br>
                 <h3>Sentiment Analysis Chart</h3>
                 <img src="{{ url_for('output_files', filename='sentiment_analysis_chart.png') }}"
                     alt="Sentiment Analysis Chart">
             </div>
 
-            <div>
+            <div><br><br><br>
                 <h3>Emotion Analysis Chart</h3>
                 <img src="{{ url_for('output_files', filename='emotion_analysis_chart.png') }}"
                     alt="Emotion Analysis Chart">
             </div>
 
-            <div>
+            <div><br><br><br>
                 <h3>Word Cloud</h3>
                 <img src="{{ url_for('output_files', filename='wordcloud_answers.png') }}" alt="Word Cloud">
             </div>

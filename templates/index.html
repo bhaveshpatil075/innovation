@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VIA Avatar</title>
     <!-- <link rel="stylesheet" href="https://www.webrtc-experiment.com/style.css"> -->
+    <link rel="shortcut icon" type="image/x-icon" href="../static/images/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="../static/css/index.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
@@ -35,25 +36,29 @@
 
     <div id="exp" class="exp">
         <section class="experiment" style="text-align: center;">
-            <label id="avatarName">ANNA</label>     
-            <label id="participantName"></label>
-            <div id="video-preview" style="margin-bottom: 15px;">
-                <h2 style="display: block;"></h2>
-                <!-- <img id="avatar" src="{{ url_for('static', filename='/images/anna_costume1_cameraA.png') }}"
-                    style="max-width: 100%;max-height:255px"> -->
-                
-                <video class="avatarVideo interview" id="eyeblink" loop autoplay 
-                poster="{{ url_for('static', filename='images/anna.gif') }}">
-                    <source src="http://localhost/innovation/videos/eyeblinks.mp4" type="video/mp4">                    
-                </video>
-
-                <video class="participantVideo interview" id="avatarVideo" autoplay 
-                poster="{{ url_for('static', filename='images/anna.gif') }}">
-                    <source src="" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                
-                <video class="participantVideo interview" id="video" autoplay muted></video>
+            <div class="video-container">
+                <!-- Labels for Anna and Participant Name -->
+                <div class="labels">
+                    <label id="avatarName" class="avatar">Anna</label>
+                    <label id="participantName" class="participant">Akash Nangare</label>
+                </div>
+                <!-- Video preview section -->
+                <div id="video-preview" style="margin-bottom: 15px;">
+                    <h2 style="display: none;"></h2>
+                    <!-- Avatar video -->
+                    <video class="avatarVideo interview" id="eyeblink" loop autoplay
+                    poster="{{ url_for('static', filename='images/anna_1.png') }}">
+                        <source src="http://localhost/innovation/videos/eyeblinks.mp4" type="video/mp4">
+                    </video>
+                    <!-- Participant video -->
+                    <video class="participantVideo interview" id="avatarVideo" autoplay
+                    poster="{{ url_for('static', filename='images/anna_1.png') }}">
+                        <source src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- Another video element -->
+                    <video class="participantVideo interview" id="video" autoplay muted></video>
+                </div>
             </div>
             <div>
                 <button class="indexSubmit" id="start">Start Role Play</button>
@@ -61,7 +66,6 @@
                 <button class="indexSubmit" id="submit">I've finished answering!</button>
                 <!-- <button class="indexSubmit" id="nextQuestion">Next Question</button> -->
             </div>
-
         </section>
     </div>
 
@@ -69,7 +73,5 @@
 
     <script src="../static/js/common.js"></script>
 
-
 </body>
-
 </html>
