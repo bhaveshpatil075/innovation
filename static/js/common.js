@@ -11,11 +11,11 @@ let recordedFiles = [];
 let pythonServer = 'http://127.0.0.1:5000/';
 let pname = '';
 let email = '';
-let role = 'viasimple';
+let role = 'viafinal';
 let fileName = '';
 let questionToAsk = 3;
 let uniquename = '';
-let env = 'prod';
+let env = 'local';
 let video_id = '';
 let videoArray = []
 let preparationTime = 0;
@@ -39,6 +39,8 @@ $('#registrationForm').on('submit', function (event) {
         isValid = false;
     }
 
+
+
     // Email validation
     email = $('#email').val().trim();
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -48,9 +50,9 @@ $('#registrationForm').on('submit', function (event) {
     }
 
     if (isValid) {
+        $('#participantName').text(name);
         $('#profile').hide();
-        $('.experiment').show();
-        $('.endcall').hide();
+        $('#exp').show();        
         $("#start").attr("disabled", true);
 
         pname = $('#name').val();
@@ -61,30 +63,54 @@ $('#registrationForm').on('submit', function (event) {
         $('#submit').hide();
         startRecording().then(() => {
             if (env == 'prod') {
-                //prepareVideo(-1, "Hello " + pname + ", welcome to your interview.").then(function (response) {
-                //if (video_id) {
                 setTimeout(function () {
-                    let videoid = '77c3961b-84db-4ec5-91cc-a679bb6af7fe'
+                    let videoid = 'e5954ac2-11b3-4780-a7e6-fa834e0aaef7'
+                    //77c3961b-84db-4ec5-91cc-a679bb6af7fe
                     syncVideo(videoid);
                 }, preparationTime);
-                //}
-
-                // else {
-                //     textToSpeech("Hello " + pname + ", welcome to your interview.").then(function () {
-                //         $("#start").removeAttr("disabled");
-                //     });
-                // }
-                // });
-
-            } else {
-                textToSpeech("Hello " + pname + ", welcome to your interview.").then(function () {
-                    $("#start").removeAttr("disabled");
-                })
+            } else {                
+                playEyeBlinks(true);
+                $("#start").removeAttr("disabled");            
             }
 
         });
     }
 })
+
+function playEyeBlinks(play) {
+    if (play) {
+        // $('#avatarVideo').attr('src', 'http://localhost/innovation/videos/eyeblinks.mp4');
+        // $("#avatarVideo").attr("loop", '');
+        $('#eyeblink').show();
+        $('#avatarVideo').hide();
+    } else {
+        //$("#avatarVideo").removeAttr("loop");
+        $('#eyeblink').hide();
+        $('#avatarVideo').show();
+    }
+}
+
+function syncLocalVideo(showSubmitButton = false) {
+    let item = questions[currentQuestionNumber];
+    let video_url = item['video_file'];
+    let delayTime = item['duration'];
+    delayTime++;
+    delayTime = delayTime * 1000;
+    //$('#avatarVideo')[0].pause();
+    $('#avatarVideo').attr('src', video_url);
+    if (showSubmitButton == true) {
+        setTimeout(function () {
+            $('#submit').show();
+            $('#submit').removeAttr('disabled');
+            playEyeBlinks(true);
+            startRecording();
+        }, delayTime);
+    } else {
+        setTimeout(function () {
+            $("#start").removeAttr("disabled");
+        }, delayTime);
+    }
+}
 
 function syncVideo(video_id, showSubmitButton = false) {
     console.log(new Date().toLocaleTimeString());
@@ -110,6 +136,7 @@ function syncVideo(video_id, showSubmitButton = false) {
                     setTimeout(function () {
                         $('#submit').show();
                         $('#submit').removeAttr('disabled')
+                        playEyeBlinks(true);
                         startRecording();
                     }, delayTime);
                 } else {
@@ -146,6 +173,7 @@ start.addEventListener('click', async () => {
 
 submitButton.addEventListener('click', () => {
     $('#submit').attr('disabled', true);
+    playEyeBlinks(false);
     currentQuestionNumber++;
     stopRecording(true).then((resolve) => {
         nextQuestion();
@@ -154,9 +182,9 @@ submitButton.addEventListener('click', () => {
 });
 
 function onLoad() {
+    $('#eyeblink').hide();
     $('#profile').show();
-    $('.experiment').hide();
-    $('.endCall').hide();
+    $('#exp').hide();    
     //$('#avatarVideo').hide();
     $('#startButton').attr('disabled', true)
 
@@ -169,12 +197,13 @@ function onLoad() {
     getQuestions(role).then((response) => {
         if (response) {
             questions = response;
-            if (env == 'prod') {
-                if (questions) {
-                    for (let m = 0; m < questions.length; m++) {
-                        let item = questions[m];
-                        questionId = item['id'];
-                        questionName = item['question'];
+
+            if (questions) {
+                for (let m = 0; m < questions.length; m++) {
+                    let item = questions[m];
+                    questionId = item['id'];
+                    questionName = item['question'];
+                    if (env == 'prod') {
                         if (!item['video_id']) {
                             prepareVideo(questionId, questionName);
                         } else {
@@ -188,16 +217,17 @@ function onLoad() {
                     }
                 }
             }
+
         }
     });
 
 }
 
-function startInterview() {
-    $('.endCall').hide();
-    $('.experiment').show();
+function startInterview() {    
+    $('#exp').show();
     $('#submit').hide();
 
+    playEyeBlinks(false);
     startRecording().then(() => {
         nextQuestion();
     });
@@ -235,7 +265,7 @@ function stopRecording(saveVideo = true) {
                 console.log(new Date().toLocaleTimeString());
                 return uploadFile(blob).then(() => {
                     console.log(new Date().toLocaleTimeString());
-                    return convertBlobToText(recordedFiles[recordedFiles.length - 1]).then((response) => {
+                    convertBlobToText(recordedFiles[recordedFiles.length - 1]).then((response) => {
                         console.log(new Date().toLocaleTimeString());
                         var answer = '';
                         if (response && response.text) {
@@ -245,7 +275,8 @@ function stopRecording(saveVideo = true) {
                         if (answer == '') {
                             answer = 'No answer given';
                         }
-                        saveTextToFile(email, questionId, questionName, answer, uniquename + '.mp4').then(() => {
+                        //saveTextToFile(email, questionId, questionName, answer, uniquename + '.mp4').then(() => {
+                        saveTextToFile(email, questionId, questionName, answer, uniquename + '.webm').then(() => {
                             console.log(new Date().toLocaleTimeString());
                             console.log('Response saved');
 
@@ -266,9 +297,8 @@ function stopRecording(saveVideo = true) {
                                 mediaStream.getTracks().forEach(track => track.stop());
 
                                 // let outputVideo = 'merge_video.mp4';
-                                // mergeVideo(mergeVideoArr, outputVideo).then((response) => {
-                                // $('.endCall').show();
-                                // $('.experiment').hide();
+                                // mergeVideo(mergeVideoArr, outputVideo).then((response) => {                                
+                                // $('#exp').hide();
                                 // $('#profile').hide();
                                 let redirectUrl = pythonServer + '/home/' + email;
                                 window.location.href = redirectUrl;
@@ -351,20 +381,19 @@ function nextQuestion() {
                 }, preparationTime);
             }
         } else {
-            textToSpeech(questionName, true).then(() => {
-                startRecording();
-            });
+            syncLocalVideo(true);
+            
+            startRecording();
         }
+
+
     }
-    // else {
-    //     $('.endCall').show();
-    //     $('.experiment').hide();
-    // }
 }
 
 function convertBlobToText(fileName) {
     return new Promise((resolve, reject) => {
-        let audio = fileName.indexOf('.mp4') > -1 ? fileName.replace('.mp4', '.wav') : fileName;
+        // let audio = fileName.indexOf('.mp4') > -1 ? fileName.replace('.mp4', '.wav') : fileName;
+        let audio = fileName.indexOf('.webm') > -1 ? fileName.replace('.webm', '.wav') : fileName;
         let videoFileName = 'uploads/' + fileName;
         let audioFileName = 'uploads/' + audio;
 
@@ -504,8 +533,9 @@ function uploadFile(recordedBlob) {
         const formData = new FormData();
         // generating a random file name
         fileName = uniquename + '.webm';
-        recordedFiles.push(uniquename + '.mp4');
-
+        // recordedFiles.push(uniquename + '.mp4');
+        recordedFiles.push(fileName);
+        
         formData.append('file', recordedBlob, fileName);
 
         $.ajax({

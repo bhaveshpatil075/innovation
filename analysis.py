@@ -100,7 +100,7 @@ def analyseData(email):
         })
 
         # Video emotion analysis
-        print(f"Analyzing emotions from video: {'uploads/' +videofile}")
+        print(f"Analyzing emotions from video1: {'uploads/' +videofile}")
         cap = cv2.VideoCapture('uploads/' +videofile)
         frame_count = 0
 
@@ -114,24 +114,28 @@ def analyseData(email):
             'neutral': 0
         }
 
-        while cap.isOpened():
-            ret, frame = cap.read()
-            if not ret:
-                break
+        try:
+            while cap.isOpened():
+                ret, frame = cap.read()
+                if not ret:
+                    break
 
-            frame_count += 1
+                frame_count += 1
 
-            if frame_count % 30 == 0:
-                rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                result = emotion_detector.detect_emotions(rgb_frame)
+                if frame_count % 30 == 0:
+                    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                    result = emotion_detector.detect_emotions(rgb_frame)
 
-                if result:
-                    emotions = result[0]['emotions']
-                    for emotion, score in emotions.items():
-                        if score > 0.5:
-                            emotion_counts[emotion] += 1
+                    if result:
+                        emotions = result[0]['emotions']
+                        for emotion, score in emotions.items():
+                            if score > 0.5:
+                                emotion_counts[emotion] += 1
 
-        cap.release()
+            cap.release()
+        except:
+            print("Error: Analyzing emotions from video.")
+
         overall_emotion_counts.update(emotion_counts)
 
         output_data['results'][-1]['emotions'] = emotion_counts
@@ -147,23 +151,26 @@ def analyseData(email):
         overall_emotion_percentages = {k: round((v / total_emotions) * 100, 2) if total_emotions > 0 else 0 for k, v in overall_emotion_counts.items()}
         output_data["overall_emotion_percentages"] = overall_emotion_percentages
 
-        plt.figure(figsize=(10, 6))
-        plt.plot([f"Q{i+1}" for i in range(len(questions_and_answers))], overall_sentiment_counts.values(), marker='o', color='blue')
-        plt.title('Sentiment Analysis for Each Answer')
-        plt.xlabel('Questions')
-        plt.ylabel('Sentiment Count')
-        plt.xticks(rotation=45)
-        plt.tight_layout()
-        plt.savefig(os.path.join(output_folder, 'sentiment_analysis_chart.png'))
+        try:
+            plt.figure(figsize=(10, 6))
+            plt.plot([f"Q{i+1}" for i in range(len(questions_and_answers))], overall_sentiment_counts.values(), marker='o', color='blue')
+            plt.title('Sentiment Analysis for Each Answer')
+            plt.xlabel('Questions')
+            plt.ylabel('Sentiment Count')
+            plt.xticks(rotation=45)
+            plt.tight_layout()
+            plt.savefig(os.path.join(output_folder, 'sentiment_analysis_chart.png'))
 
-        plt.figure(figsize=(10, 6))
-        plt.bar(overall_emotion_counts.keys(), overall_emotion_counts.values(), color='orange')
-        plt.title('Overall Emotion Counts from Video Analysis')
-        plt.xlabel('Emotions')
-        plt.ylabel('Frequency')
-        plt.xticks(rotation=45)
-        plt.tight_layout()
-        plt.savefig(os.path.join(output_folder, 'emotion_analysis_chart.png'))
+            plt.figure(figsize=(10, 6))
+            plt.bar(overall_emotion_counts.keys(), overall_emotion_counts.values(), color='orange')
+            plt.title('Overall Emotion Counts from Video Analysis')
+            plt.xlabel('Emotions')
+            plt.ylabel('Frequency')
+            plt.xticks(rotation=45)
+            plt.tight_layout()
+            plt.savefig(os.path.join(output_folder, 'emotion_analysis_chart.png'))
+        except:
+            print("Error: emotion_analysis_chart")
 
         # Word Cloud Generation
         cleaned_answers = clean_and_tokenize(all_answers_text)

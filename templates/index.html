@@ -33,17 +33,26 @@
         </main>
     </div>
 
-    <div class="exp">
+    <div id="exp" class="exp">
         <section class="experiment" style="text-align: center;">
+            <label id="avatarName">ANNA</label>     
+            <label id="participantName"></label>
             <div id="video-preview" style="margin-bottom: 15px;">
                 <h2 style="display: block;"></h2>
-                <!-- <img id="avatar" src="{{ url_for('static', filename='../images/anna_costume1_cameraA.png') }}"
+                <!-- <img id="avatar" src="{{ url_for('static', filename='/images/anna_costume1_cameraA.png') }}"
                     style="max-width: 100%;max-height:255px"> -->
-                <video class="avatarVideo interview" id="avatarVideo" autoplay
-                    poster="{{ url_for('static', filename='images/anna_costume1_cameraA.png') }}">
+                
+                <video class="avatarVideo interview" id="eyeblink" loop autoplay 
+                poster="{{ url_for('static', filename='images/anna.gif') }}">
+                    <source src="http://localhost/innovation/videos/eyeblinks.mp4" type="video/mp4">                    
+                </video>
+
+                <video class="avatarVideo interview" id="avatarVideo" autoplay 
+                poster="{{ url_for('static', filename='images/anna.gif') }}">
                     <source src="" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
+                
                 <video class="participantVideo interview" id="video" autoplay muted></video>
             </div>
             <div>
@@ -56,10 +65,6 @@
         </section>
     </div>
 
-    <section class="endCall">
-        <h1>Inteview Ended</h1>
-        <p>Thanks for you for joinin this call</p>
-    </section>
     <script src="https://cdn.jsdelivr.net/npm/recordrtc@5.6.0/RecordRTC.js"></script>
 
     <script src="../static/js/common.js"></script>
