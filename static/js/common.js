@@ -39,8 +39,6 @@ $('#registrationForm').on('submit', function (event) {
         isValid = false;
     }
 
-
-
     // Email validation
     email = $('#email').val().trim();
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -265,7 +263,7 @@ function stopRecording(saveVideo = true) {
                 console.log(new Date().toLocaleTimeString());
                 return uploadFile(blob).then(() => {
                     console.log(new Date().toLocaleTimeString());
-                    convertBlobToText(recordedFiles[recordedFiles.length - 1]).then((response) => {
+                    return convertBlobToText(recordedFiles[recordedFiles.length - 1]).then((response) => {
                         console.log(new Date().toLocaleTimeString());
                         var answer = '';
                         if (response && response.text) {
@@ -310,9 +308,7 @@ function stopRecording(saveVideo = true) {
                         resolve('Resolved!');
                     });
                 });
-            }
-            // Stop the video stream
-            //videoElement.srcObject.getTracks().forEach(track => track.stop());
+            }            
             resolve('Resolved!');
         });
     });
@@ -381,12 +377,9 @@ function nextQuestion() {
                 }, preparationTime);
             }
         } else {
-            syncLocalVideo(true);
-            
+            syncLocalVideo(true);           
             startRecording();
         }
-
-
     }
 }
 
